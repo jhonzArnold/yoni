@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>TV Latino - Oficial</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            text-align: center;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 10px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 90vw;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            margin: 20px auto;
+        }
+
+        video, iframe {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            background-color: #000;
+        }
+
+        .button-container {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ff3c00;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff1a00;
+        }
+
+        @media (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
+        }
+
+        /* Botón flotante de regreso */
+        .back-button {
+            position: fixed;
+            top: 60px;
+            left: 15px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff3c00, #ff8c00);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(255, 60, 0, 0.5);
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #ff8c00, #ff3c00);
+            transform: scale(1.1);
+            box-shadow: 0px 6px 14px rgba(255, 60, 0, 0.7);
+        }
+
+        @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #25D366;
+    border-radius: 80%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    z-index: 1000;
+    animation: bounce 1s infinite; /* Agregar animación de salto */
+}
+
+.whatsapp-float img {
+    width: 50px; /* Ajusta el tamaño del ícono */
+    height: 50px;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+}
+
+
+    </style>
+</head>
+<body>
+    <a href="https://wa.me/tu_numero" class="whatsapp-float" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+    </a>
+    
+    <button class="back-button" onclick="window.location.href='acercade.html'">⬅</button>
+
+    <h1>Pbo - En Vivo</h1>
+
+    <div class="video-container">
+        <video id="video" controls autoplay playsinline muted></video>
+        <iframe id="iframe" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+    </div>
+    <button onclick="activarPantallaCompleta()">⛶ Pantalla Completa</button>
+    <div class="button-container">
+        <button onclick="reproducirIframe('https://vidhidefast.com/v/6nfsngbmakqh')">📡 nickelodeon</button>
+        
+    </div>
+
+    <script>
+        function activarPantallaCompleta() {
+    let video = document.getElementById('video');
+    let iframe = document.getElementById('iframe');
+
+    if (video.style.display !== "none") {
+        // Si el video está visible, activamos pantalla completa en él
+        if (video.requestFullscreen) {
+            video.requestFullscreen();
+        } else if (video.mozRequestFullScreen) { // Firefox
+            video.mozRequestFullScreen();
+        } else if (video.webkitRequestFullscreen) { // Chrome, Safari y Opera
+            video.webkitRequestFullscreen();
+        } else if (video.msRequestFullscreen) { // IE/Edge
+            video.msRequestFullscreen();
+        }
+    } else if (iframe.style.display !== "none") {
+        // Si el iframe está visible, activamos pantalla completa en él
+        if (iframe.requestFullscreen) {
+            iframe.requestFullscreen();
+        } else if (iframe.mozRequestFullScreen) {
+            iframe.mozRequestFullScreen();
+        } else if (iframe.webkitRequestFullscreen) {
+            iframe.webkitRequestFullscreen();
+        } else if (iframe.msRequestFullscreen) {
+            iframe.msRequestFullscreen();
+        }
+    } else {
+        alert("No hay contenido en reproducción para poner en pantalla completa.");
+    }
+}
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Reproducir automáticamente el primer canal al cargar la página
+            reproducirIframe('https://vidhidefast.com/v/6nfsngbmakqh');
+        });
+    
+        function detenerReproduccion() {
+            const video = document.getElementById('video');
+            const iframe = document.getElementById('iframe');
+    
+            video.pause();
+            video.src = "";
+            iframe.src = "";
+            iframe.style.display = "none";
+            video.style.display = "none";
+        }
+    
+        function reproducirM3U8(url) {
+            detenerReproduccion();
+            const video = document.getElementById('video');
+            video.style.display = "block";
+    
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    video.play().catch(error => console.error("Error al iniciar el video:", error));
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.play().catch(error => console.error("Error al iniciar el video:", error));
+            } else {
+                alert("Tu navegador no soporta la reproducción de videos M3U8");
+            }
+        }
+    
+        function reproducirIframe(url) {
+            detenerReproduccion();
+            const iframe = document.getElementById('iframe');
+            iframe.style.display = "block";
+            iframe.src = url;
+        }
+    </script>
+    
+
+
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <!-- OWL CAROUSEL -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+        integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+        crossorigin="anonymous" />
+    <!-- BOX ICONS -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <!-- APP CSS -->
+    <link rel="stylesheet" href="../css/grid.css">
+    <link rel="stylesheet" href="../css/app.css">
+</head>
+
+<body>
+
+     <!-- NAV -->
+     <div class="nav-wrapper">
+        <div class="container">
+            <div class="nav">
+                <a href="./main.html" class="logo">
+                    <i class='bx bx-movie-play bx-tada main-color'></i>Tv<span class="main-color">- Lat</span>ino
+                </a>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="#">Tv online</a></li>
+                    
+                    
+                    <li><a href="./Peliculas.html">Peliculas</a></li>
+                    <li><a href="./series.html">Series</a></li>
+                    
+                    <li>
+                        <a href="../../index.html" class="btn btn-hover">
+                            <span>Cerrar sesión</span>
+                        </a>
+                        
+                    </li>
+                </ul>
+                <!-- MOBILE MENU TOGGLE -->
+                <div class="hamburger-menu" id="hamburger-menu">
+                    <div class="hamburger"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+
+    
+
+  <!-- LATEST MOVIES SECTION -->
+  <div class="section">
+    <div class="container">
+        <div class="section-header">
+            Lista de canales
+        </div>
+        <div class="movies-slide carousel-nav-center owl-carousel">
+            <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/amert.jpg" alt="" onclick="reproducirIframe('https://vidhidefast.com/v/eke3y63iu1qg')" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        America tv
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <button onclick="reproducirIframe('https://vidhidefast.com/v/eke3y63iu1qg')" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+            <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/atv.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Atv
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./atv.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+
+            
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/atv+.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Atv +
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./atv+.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+              <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/latina.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Latina
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./latina.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+               <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/wilaax.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Willax
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./wilax.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+               
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/liga.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Ligamax
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./ligamax.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+            
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/Nickelodeon.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Nickelodeon
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./nik.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/famkid.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Kid y Familia
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./kidyfamilia.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/latkid.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Kids Tv
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./kidstv.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/fammovie.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                    Cine Familia
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./cinefamilia.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/pana.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Panamericana
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./panamericana.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/exitosa.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Exitosa
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./exitosa.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/pbo.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Pbop
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./pbo.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/atvsur.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Atv sur
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./atvsur.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/lasestre.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Las estrellas
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./lasestrellas.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/tnt.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        TNT
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./tnt.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/paramount.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Paramount
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./paramount.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/axn.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Axn
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./axn.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+            
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/cinemax.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        cinemax
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./cinemax.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/warner.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Warner Tv
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./warner.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/E.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        E
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./E.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/cosmo.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Cosmo
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./cosmo.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/tet.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Telemundo
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./telemundo.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+            
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/real.jfif" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Real Madrid 
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./Realmadrid.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+           
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/genios.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Genios Tv
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./geniostv.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+            
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/karibe.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Karibeña
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./Karibeña.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/toplat.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Top latino
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./toplatino.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/reto.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Reto plus
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./Retoplus.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/atvmusi.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Atv music
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./atvmusic.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/nativa.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Nativa
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./Nativa.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/gala.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Gala Visión
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./Gala_Visión.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/univi.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Univisión
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./Univisión.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/uno.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Canal 1
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./canal1.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/canal6.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Canal 6
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./canal6.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/7.png" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Canal 7
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./canal7.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/canal9.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Canal 9
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./canal9.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/bethel.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Bethel
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./bethel.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/canales/santarosa.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Santa Rosa
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <a href="./santarosa.html" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             
+
+        </div>
+    </div>
+</div>
+
+<!-- END LATEST MOVIES SECTION -->
+    
+
+ 
+
+
+    <!-- FOOTER SECTION -->
+    <footer class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-4 col-md-6 col-sm-12">
+                    <div class="content">
+                        <a href="#" class="logo">
+                            <i class='bx bx-movie-play bx-tada main-color'></i>Tv<span class="main-color">-Lat</span>ino
+                        </a>
+                        <p>
+                            "📺 TV Latino - Accede a una gran variedad 
+                            de canales en vivo . Disfruta de tus programas, 
+                            series y películas favoritas en cualquier momento
+                             y desde cualquier lugar. ¡Entretenimiento sin límites! 🎬🔥"
+                    </div>
+                </div>
+                <div class="col-8 col-md-6 col-sm-12">
+                    <div class="row">
+                        <div class="col-3 col-md-6 col-sm-6">
+                            <div class="content">
+                                <p><b>Help</b></p>
+                                <ul class="footer-menu">
+                                    <li><a href="./acercaDe.html">ACERCA DE NOSOTROS</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="social-list">
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-facebook"></i>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-twitter"></i>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+     <!--END FOOTER SECTION -->
+
+    <!-- SCRIPT -->
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- OWL CAROUSEL -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous"></script>
+    <!-- APP SCRIPT -->
+    <script src="../js/app.js"></script>
+    
+</html>

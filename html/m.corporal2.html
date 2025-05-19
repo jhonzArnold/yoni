@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>TV Latino - Oficial</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            text-align: center;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 10px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 90vw;
+            max-width: 900px;
+            aspect-ratio: 16/26;
+            margin: 20px auto;
+        }
+
+        video, iframe {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            background-color: #000;
+        }
+
+        .button-container {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ff3c00;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff1a00;
+        }
+
+        @media (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
+        }
+
+        /* Botón flotante de regreso */
+        .back-button {
+            position: fixed;
+            top: 60px;
+            left: 15px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff3c00, #ff8c00);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(255, 60, 0, 0.5);
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #ff8c00, #ff3c00);
+            transform: scale(1.1);
+            box-shadow: 0px 6px 14px rgba(255, 60, 0, 0.7);
+        }
+
+        @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #25D366;
+    border-radius: 80%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    z-index: 1000;
+    animation: bounce 1s infinite; /* Agregar animación de salto */
+}
+
+.whatsapp-float img {
+    width: 50px; /* Ajusta el tamaño del ícono */
+    height: 50px;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+}
+.content-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 350px;
+            color: black;
+        }
+        .formulario label, .formulario input, .formulario select, .formulario button {
+            display: block;
+            width: 100%;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        .formulario input, .formulario select {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        .formulario button {
+            background: #0072ff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .formulario button:hover {
+            background: #005bb5;
+        }
+        .resultado {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f1f1;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .resultado.show {
+            display: block;
+        }
+        .imagen img {
+            width: 150px;
+            height: auto;
+            margin-top: 15px;
+            border-radius: 10px;
+        }
+        .bluetooth-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .bluetooth-button:hover {
+            background: #218838;
+        }
+        .d-flex {
+  display: flex;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+
+    </style>
+</head>
+<body>
+    
+    <a href="https://wa.me/tu_numero" class="whatsapp-float" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+    </a>
+    
+    <button class="back-button" onclick="window.location.href='acercade2.html'">⬅</button>
+
+    <h1>Calculadora de Peso</h1>
+
+
+
+    <div class="d-flex justify-content-center">
+        <div class="content-container" id="M.Corporal">
+        <h2>Calculadora de Peso</h2>
+        <div class="formulario">
+            <label for="genero">Género:</label>
+            <select id="genero" required>
+                <option value="hombre">Hombre</option>
+                <option value="mujer">Mujer</option>
+            </select>
+
+            <label for="edad">Edad (años):</label>
+            <input type="number" id="edad" required>
+
+            <label for="altura">Altura (cm):</label>
+            <input type="number" id="altura" required>
+
+            <label for="peso">Peso (kg):</label>
+            <input type="number" id="peso" required>
+
+            <button class="bluetooth-button" onclick="mostrarMensaje()">Balanza vía Bluetooth</button>
+
+            <button onclick="calcular()">Calcular</button>
+            <div class="resultado" id="resultado"></div>
+        </div>
+
+        <div class="imagen" id="imagenDiv">
+            <img id="imagenPersona" src="" alt="Estado de peso">
+        </div>
+    </div>
+</div>
+</div>
+
+   
+
+    <script>
+         function mostrarMensaje() {
+            alert("Encienda Bluetooth para conectar a la balanza. Si no tiene balanza, omita este campo.");
+        }
+
+        function calcular() {
+            const genero = document.getElementById('genero').value;
+            const edad = parseInt(document.getElementById('edad').value);
+            const altura = parseInt(document.getElementById('altura').value) / 100;
+            const peso = parseInt(document.getElementById('peso').value);
+
+            if (isNaN(edad) || isNaN(altura) || isNaN(peso)) {
+                alert("Por favor, complete todos los campos correctamente.");
+                return;
+            }
+
+            const imc = peso / (altura * altura);
+            let estado;
+            let imagenSrc = '';
+
+            if (imc < 18.5) {
+                estado = "Delgado";
+                imagenSrc = genero === "hombre" ? 'h1.jpg' : 'm1.jpg';
+            } else if (imc >= 18.5 && imc < 24.9) {
+                estado = "Normal";
+                imagenSrc = genero === "hombre" ? 'h2.jpg' : 'm2.jpg';
+            } else {
+                estado = "Sobrepeso";
+                imagenSrc = genero === "hombre" ? 'h3.jpg' : 'm3.jpg';
+            }
+
+            let pesoIdeal = genero === "hombre" ? 22 * (altura * altura) : 21 * (altura * altura);
+
+            if (edad < 18) {
+                pesoIdeal *= 0.9;
+            } else if (edad > 60) {
+                pesoIdeal *= 1.1;
+            }
+
+            const diferencia = pesoIdeal - peso;
+            let mensajePesoIdeal = `Tu peso ideal es aproximadamente ${pesoIdeal.toFixed(2)} kg. `;
+            if (diferencia > 0) {
+                mensajePesoIdeal += `Te faltan ${diferencia.toFixed(2)} kg.`;
+            } else if (diferencia < 0) {
+                mensajePesoIdeal += `Debes bajar ${Math.abs(diferencia).toFixed(2)} kg.`;
+            } else {
+                mensajePesoIdeal += `¡Estás en tu peso ideal!`;
+            }
+
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.classList.add('show');
+            resultadoDiv.innerHTML = `<strong>Estado:</strong> ${estado}<br><strong>${mensajePesoIdeal}</strong>`;
+
+            document.getElementById('imagenPersona').src = imagenSrc;
+        }
+    </script>
+    
+
+
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <!-- OWL CAROUSEL -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+        integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+        crossorigin="anonymous" />
+    <!-- BOX ICONS -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <!-- APP CSS -->
+    <link rel="stylesheet" href="../css/grid.css">
+    <link rel="stylesheet" href="../css/app.css">
+</head>
+
+<body>
+
+     <!-- NAV -->
+     <div class="nav-wrapper">
+        <div class="container">
+            <div class="nav">
+                <a href="./main.html" class="logo">
+                    <i class='bx bx-movie-play bx-tada main-color'></i>Tv<span class="main-color">- Lat</span>ino
+                </a>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="acercaDe2.html">Tv online</a></li>
+                    
+                    
+                    <li><a href="./Peliculas2.html">Peliculas</a></li>
+                    <li><a href="./series2.html">Series</a></li>
+                    <li><a href="./cursos2.html">Cursos</a></li>
+                    <!--<li><a href="./tienda2.html">Tienda</a></li> -->
+                    <li><a href="./m.corporal2.html">M.corporal</a></li>
+                    
+                    <li><a href="radio2.html">radio</a></li>
+                    <!--<li><a href="./juegos2.html">juegos</a></li>
+                    <li><a href="./scraping2.html">Scraping</a></li>-->
+                    <li>
+                        <a href="../../index.html" class="btn btn-hover">
+                            <span>Cerrar sesión</span>
+                        </a>
+                        
+                    </li>
+                </ul>
+                <!-- MOBILE MENU TOGGLE -->
+                <div class="hamburger-menu" id="hamburger-menu">
+                    <div class="hamburger"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+
+    
+
+    
+
+
+    <!-- FOOTER SECTION -->
+    <footer class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-4 col-md-6 col-sm-12">
+                    <div class="content">
+                        <a href="#" class="logo">
+                            <i class='bx bx-movie-play bx-tada main-color'></i>Tv<span class="main-color">-Lat</span>ino
+                        </a>
+                        <p>
+                            "📺 TV Latino - Accede a una gran variedad 
+                            de canales en vivo . Disfruta de tus programas, 
+                            series y películas favoritas en cualquier momento
+                             y desde cualquier lugar. ¡Entretenimiento sin límites! 🎬🔥"
+                    </div>
+                </div>
+                <div class="col-8 col-md-6 col-sm-12">
+                    <div class="row">
+                        <div class="col-3 col-md-6 col-sm-6">
+                            <div class="content">
+                                <p><b>Help</b></p>
+                                <ul class="footer-menu">
+                                    <li><a href="./acercaDe.html">ACERCA DE NOSOTROS</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="social-list">
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-facebook"></i>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-twitter"></i>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+     <!--END FOOTER SECTION -->
+
+    <!-- SCRIPT -->
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- OWL CAROUSEL -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous"></script>
+    <!-- APP SCRIPT -->
+    <script src="../js/app.js"></script>
+    
+</html>

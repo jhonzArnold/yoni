@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Cursos
+    </title>
+    <style>
+        /* Modal Style */
+/* Modal Style */
+.modal-nuevo {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro */
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s ease-out; /* Animación de entrada */
+}
+
+    /* Animación de Fade-in para el modal */
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    .modal-nuevo iframe {
+    width: 100%;
+    height: 50vh; /* Ajusta la altura para que ocupe un 80% de la altura de la ventana */
+}
+
+   /* Estilo del contenido del modal */
+   .modal-nuevo-content {
+        background-color: #1a1a1a;
+        margin: 10% auto;
+        padding: 0px;
+        border: 5px solid #ff4081; /* Color llamativo para los bordes */
+        width: 100%;
+        max-width: 800px;
+        text-align: center;
+        border-radius: 10px; /* Bordes redondeados */
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra sutil */
+        animation: slideIn 0.5s ease-out;
+    }
+
+    /* Animación de deslizamiento para el contenido */
+    @keyframes slideIn {
+        0% { transform: translateY(-20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Estilo del texto en el modal */
+    .modal-nuevo-content h2 {
+        color: #ff4081;
+        font-family: 'Cairo', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        animation: textGlow 2s infinite alternate; /* Efecto de brillo */
+    }
+
+    /* Efecto de brillo en el texto */
+    @keyframes textGlow {
+        0% { text-shadow: 0 0 10px #ff4081, 0 0 20px #ff4081, 0 0 30px #ff4081; }
+        100% { text-shadow: 0 0 20px #ff4081, 0 0 40px #ff4081, 0 0 60px #ff4081; }
+    }
+
+    .modal-nuevo-content p {
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: 500;
+        margin-top: 10px;
+        animation: fadeInText 2s ease-out;
+    }
+
+    /* Animación de desvanecimiento para el texto */
+    @keyframes fadeInText {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    /* Botón de cierre */
+    .close-btn {
+        color: #ffffff;
+        background-color: #ff4081;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: 28px;
+        font-weight: bold;
+        transition: transform 0.3s ease;
+    }
+
+    /* Efecto de hover en el botón de cierre */
+    .close-btn:hover {
+        transform: scale(1.1);
+        background-color: #e91e63;
+    }
+
+    /* Botón principal */
+    button {
+        background-color: #ff4081;
+        color: white;
+        font-size: 18px;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 24px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+    }
+
+    /* Hover en el botón */
+    button:hover {
+        background-color: #e91e63;
+        transform: translateY(-5px);
+    }
+
+    /* Estilo general para las entradas del formulario */
+    input {
+        width: 80%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 2px solid #ff4081;
+        font-size: 16px;
+        transition: border 0.3s ease;
+    }
+
+    /* Efecto al enfocarse en el input */
+    input:focus {
+        border-color: #e91e63;
+        outline: none;
+    }
+    </style>
+     <div id="modal-nuevo" class="modal-nuevo"> 
+        <div class="modal-nuevo-content">
+            <div class="close-btn" onclick="cerrarModalNuevo()">X</div>
+            <h2>🔥😲🚀 ¡Prepárate para alcanzar tus sueños!Explora y adquiere cursos que te inspirarán a estudiar y a crecer cada día.......‼️‼️‼️‼️‼️</h2>
+            <p>👇Dale click para reproducir el sonido 👇👇👇...</p>
+            <iframe id="video" src="https://geo.dailymotion.com/player.html?video=k761Y4LwEct3CbCWLGG" 
+                allow="autoplay; fullscreen; encrypted-media" 
+                allowfullscreen></iframe>
+        </div>
+    </div>
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <!-- OWL CAROUSEL -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+        integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+        crossorigin="anonymous" />
+    <!-- BOX ICONS -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <!-- APP CSS -->
+    <link rel="stylesheet" href="../css/grid.css">
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/abus.css">
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <div class="nav-wrapper">
+        <div class="container">
+            <div class="nav">
+                <a href="acercaDe2.html" class="logo">
+                    <i class='bx bx-movie-play bx-tada main-color'></i>Tv<span class="main-color">- Lat</span>ino
+                </a>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="acercaDe2.html">Tv online</a></li>
+                    
+                    
+                    <li><a href="./Peliculas2.html">Peliculas</a></li>
+                    <li><a href="./series2.html">Series</a></li>
+                    <li><a href="./cursos2.html">Cursos</a></li>
+                    <!--<li><a href="./tienda2.html">Tienda</a></li> -->
+                    <li><a href="./m.corporal2.html">M.corporal</a></li>
+                    
+                    <li><a href="radio2.html">radio</a></li>
+                    <!--<li><a href="./juegos2.html">juegos</a></li>
+                    <li><a href="./scraping2.html">Scraping</a></li>-->
+                    <li>
+                        <a href="../../index.html" class="btn btn-hover">
+                            <span>Cerrar sesión</span>
+                        </a>
+                        
+                    </li>
+                </ul>
+                <!-- MOBILE MENU TOGGLE -->
+                <div class="hamburger-menu" id="hamburger-menu">
+                    <div class="hamburger"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+<!-- Modal de Inscripción -->
+<div id="formularioModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:10000;">
+    <div style="background:rgb(218, 21, 21); padding:30px; border-radius:10px; text-align:center; width:300px; position:relative;">
+      <span style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:20px;" onclick="cerrarFormulario()">X</span>
+      <h3>Inscribirse al Curso</h3>
+      <input id="nombre" type="text" placeholder="Ingresa tu Nombre" style="width:90%; margin:10px 0; padding:10px;"/>
+      <input id="celular" type="text" placeholder="Ingresa tu Celular" style="width:90%; margin:10px 0; padding:10px;"/>
+      <p>Precio del Curso: <strong>S/ 49.90</strong></p>
+      <button onclick="enviarInscripcion()" style="padding:10px 20px; background-color:#28a745; color:white; font-size:16px; border:none; border-radius:5px; cursor:pointer;">Aceptar</button>
+    </div>
+  </div>
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+        <!-- HERO SLIDE -->
+        <div class="hero-slide">
+            <div class="owl-carousel carousel-nav-center" id="hero-carousel">
+               
+                <!-- SLIDE ITEM -->
+                <div class="hero-slide-item">
+                    
+                    <img src="../images/Fundamentos.jpg" alt="">
+                    <div class="overlay"></div>
+                    <div class="hero-slide-item-content">
+                        <div class="item-content-wraper">
+                            <div class="item-content-title top-down">
+                                Fundamentos de redes
+                            </div>
+                            <div class="movie-infos top-down delay-2">
+                                <div class="movie-info">
+                                    <i class="bx bxs-star"></i>
+                                    <span>9.5</span>
+                                </div>
+                                <div class="movie-info">
+                                    <i class="bx bxs-time"></i>
+                                    <!--<span>120 mins</span>-->
+                                </div>
+                                <div class="movie-info">
+                                    <span>HD</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>16+</span>
+                                </div>
+                            </div>
+                            <div class="item-content-description top-down delay-4">
+                                Fundamentos de redes: cómo se realizan las comunicaciones
+Aprende los conceptos esenciales sobre cómo los dispositivos se conectan e intercambian información. Este curso cubre el funcionamiento de las redes, los protocolos básicos, la transmisión de datos y los modelos de comunicación como el OSI y TCP/IP. Ideal para quienes desean entender cómo fluye la información en internet y redes locales.⚡📺
+                            </div>
+                            <div class="item-action top-down delay-6">
+                                <p style="font-size: 20px; color: red;">Precio: S/ 60.00</p>
+                                <button onclick="abrirFormulario('Fundamentos de redes', '60.00')" style="padding: 10px 20px; background-color: #ff0000; color: white; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">Inscribirse Ahora</button>
+
+                            </div>
+                                    </div>
+                    </div>
+                </div>
+                <!-- END SLIDE ITEM -->
+                 <!-- SLIDE ITEM -->
+                <div class="hero-slide-item">
+                    
+                    <img src="../images/Excel.jpg" alt="">
+                    <div class="overlay"></div>
+                    <div class="hero-slide-item-content">
+                        <div class="item-content-wraper">
+                            <div class="item-content-title top-down">
+                                Excel total
+                            </div>
+                            <div class="movie-infos top-down delay-2">
+                                <div class="movie-info">
+                                    <i class="bx bxs-star"></i>
+                                    <span>9.5</span>
+                                </div>
+                                <div class="movie-info">
+                                    <i class="bx bxs-time"></i>
+                                    <!--<span>120 mins</span>-->
+                                </div>
+                                <div class="movie-info">
+                                    <span>HD</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>16+</span>
+                                </div>
+                            </div>
+                            <div class="item-content-description top-down delay-4">
+                                Domina Excel desde lo más básico hasta niveles superiores. Aprende a usar funciones, fórmulas, tablas dinámicas, gráficos y herramientas avanzadas de análisis de datos. Ideal para estudiantes, profesionales y emprendedores que buscan potenciar su productividad con Excel.⚡📺
+                            </div>
+                            <div class="item-action top-down delay-6">
+                                <p style="font-size: 20px; color: red;">Precio: S/ 60.00</p>
+                                <button onclick="abrirFormulario('Excel total', '60.00')" style="padding: 10px 20px; background-color: #ff0000; color: white; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">Inscribirse Ahora</button>
+
+                            </div>
+                                    </div>
+                    </div>
+                </div>
+                <!-- END SLIDE ITEM -->
+                  <!-- SLIDE ITEM -->
+                <div class="hero-slide-item">
+                    
+                    <img src="../images/CraxRat.jpg" alt="">
+                    <div class="overlay"></div>
+                    <div class="hero-slide-item-content">
+                        <div class="item-content-wraper">
+                            <div class="item-content-title top-down">
+                                Hacking ético - CraxRat
+                            </div>
+                            <div class="movie-infos top-down delay-2">
+                                <div class="movie-info">
+                                    <i class="bx bxs-star"></i>
+                                    <span>9.5</span>
+                                </div>
+                                <div class="movie-info">
+                                    <i class="bx bxs-time"></i>
+                                    <!--<span>120 mins</span>-->
+                                </div>
+                                <div class="movie-info">
+                                    <span>HD</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>16+</span>
+                                </div>
+                            </div>
+                            <div class="item-content-description top-down delay-4">
+                                Aprende los principios del hacking ético utilizando CraxRat, una poderosa herramienta de control remoto(inyeción y manipulación de otro celular). Conoce cómo se llevan a cabo pruebas de penetración,a otro celular mediante app,con malware, análisis de vulnerabilidades y técnicas de acceso controlado en entornos seguros y éticos.⚡📺
+                            </div>
+                            <div class="item-action top-down delay-6">
+                                <p style="font-size: 20px; color: red;">Precio: S/ 160.00</p>
+                                <button onclick="abrirFormulario('Excel total', '160.00')" style="padding: 10px 20px; background-color: #ff0000; color: white; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">Inscribirse Ahora</button>
+
+                            </div>
+                                    </div>
+                    </div>
+                </div>
+                <!-- END SLIDE ITEM -->
+                   <!-- SLIDE ITEM -->
+                <div class="hero-slide-item">
+                    
+                    <img src="../images/looo.jpg" alt="">
+                    <div class="overlay"></div>
+                    <div class="hero-slide-item-content">
+                        <div class="item-content-wraper">
+                            <div class="item-content-title top-down">
+                                Programación de PLC Logo
+                            </div>
+                            <div class="movie-infos top-down delay-2">
+                                <div class="movie-info">
+                                    <i class="bx bxs-star"></i>
+                                    <span>9.5</span>
+                                </div>
+                                <div class="movie-info">
+                                    <i class="bx bxs-time"></i>
+                                    <!--<span>120 mins</span>-->
+                                </div>
+                                <div class="movie-info">
+                                    <span>HD</span>
+                                </div>
+                                <div class="movie-info">
+                                    <span>16+</span>
+                                </div>
+                            </div>
+                            <div class="item-content-description top-down delay-4">
+                                Aprende a programar PLC Logo desde cero de forma práctica. Trabajaremos con simulaciones y ejemplos reales usando focos y dispositivos eléctricos, para que entiendas fácilmente cómo aplicar la automatización en situaciones de la vida real.⚡📺
+                            </div>
+                            <div class="item-action top-down delay-6">
+                                <p style="font-size: 20px; color: red;">Precio: S/ 120.00</p>
+                                <button onclick="abrirFormulario('Excel total', '120.00')" style="padding: 10px 20px; background-color: #ff0000; color: white; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">Inscribirse Ahora</button>
+
+                            </div>
+                                    </div>
+                    </div>
+                </div>
+                <!-- END SLIDE ITEM -->
+            </div>
+        </div>
+        <!-- END HERO SLIDE -->
+    </div>
+    <!-- END HERO SECTION -->
+
+    <!-- SERIES POPULARES -->
+    <div class="section">
+        <div class="container">
+            <div class="section-header">
+                Ultimos Cursos
+            </div>
+            <div class="movies-slide carousel-nav-center owl-carousel">
+                <!-- PELICULA -->
+                <a href="javascript:void(0);" onclick="abrirFormulario('Flutter básico', '0')" class="movie-item">
+                    <img src="../images/flu.jpg" alt="Flutter básico" class="movie-item-img">
+                    <div class="movie-item-content">
+                        <div class="movie-item-title">
+                            Flutter básico
+                        </div>
+                        <div class="movie-infos">
+                            <div class="movie-info">
+                                <i class="bx bxs-star"></i>
+                                <span>9.0</span>
+                            </div>
+                            <div class="movie-info">
+                                <i class="bx bxs-time"></i>
+                                <span>5 horas</span>
+                            </div>
+                            <div class="movie-info">
+                                <span>Online</span>
+                            </div>
+                            <div class="movie-info">
+                                <span>18+</span>
+                            </div>
+                        </div>
+                        <div class="movie-price">
+                            <p style="font-size: 20px; color: red;">Precio: S/ 0.00</p>
+                        </div>
+                    </div>
+                </a>
+                
+                
+
+                <!-- FIN PELICULA -->
+                 <!-- PELICULA -->
+                <a href="javascript:void(0);" onclick="abrirFormulario('Seguridad informática desde cero', '40')" class="movie-item">
+                    <img src="../images/cero.jpg" alt="Seguridad informática desde cero" class="movie-item-img">
+                    <div class="movie-item-content">
+                        <div class="movie-item-title">
+                            Seguridad informática desde cero
+                        </div>
+                        <div class="movie-infos">
+                            <div class="movie-info">
+                                <i class="bx bxs-star"></i>
+                                <span>9.0</span>
+                            </div>
+                            <div class="movie-info">
+                                <i class="bx bxs-time"></i>
+                                <!--<span>5 horas</span>-->
+                            </div>
+                            <div class="movie-info">
+                                <span>Online</span>
+                            </div>
+                            <div class="movie-info">
+                                <span>18+</span>
+                            </div>
+                        </div>
+                        <div class="movie-price">
+                            <p style="font-size: 20px; color: red;">Precio: S/ 40.00</p>
+                        </div>
+                    </div>
+                </a>
+                
+                
+
+                <!-- FIN PELICULA -->
+                  <!-- PELICULA -->
+                <a href="javascript:void(0);" onclick="abrirFormulario('Gmail para principiantes', '6')" class="movie-item">
+                    <img src="../images/gma.jpg" alt="Gmail para principiantes" class="movie-item-img">
+                    <div class="movie-item-content">
+                        <div class="movie-item-title">
+                            Gmail para principiantes
+                        </div>
+                        <div class="movie-infos">
+                            <div class="movie-info">
+                                <i class="bx bxs-star"></i>
+                                <span>9.0</span>
+                            </div>
+                            <div class="movie-info">
+                                <i class="bx bxs-time"></i>
+                                <!--<span>5 horas</span>-->
+                            </div>
+                            <div class="movie-info">
+                                <span>Online</span>
+                            </div>
+                            <div class="movie-info">
+                                <span>18+</span>
+                            </div>
+                        </div>
+                        <div class="movie-price">
+                            <p style="font-size: 20px; color: red;">Precio: S/ 6.00</p>
+                        </div>
+                    </div>
+                </a>
+                
+                
+
+                <!-- FIN PELICULA -->
+                    <!-- PELICULA -->
+                <a href="javascript:void(0);" onclick="abrirFormulario('Programación de PLC Logo', '120')" class="movie-item">
+                    <img src="../images/looo.jpg" alt="Programación de PLC Logo" class="movie-item-img">
+                    <div class="movie-item-content">
+                        <div class="movie-item-title">
+                            Programación de PLC Logo basico y intermedio
+                        </div>
+                        <div class="movie-infos">
+                            <div class="movie-info">
+                                <i class="bx bxs-star"></i>
+                                <span>9.0</span>
+                            </div>
+                            <div class="movie-info">
+                                <i class="bx bxs-time"></i>
+                                <!--<span>5 horas</span>-->
+                            </div>
+                            <div class="movie-info">
+                                <span>Online</span>
+                            </div>
+                            <div class="movie-info">
+                                <span>18+</span>
+                            </div>
+                        </div>
+                        <div class="movie-price">
+                            <p style="font-size: 20px; color: red;">Precio: S/ 120.00</p>
+                        </div>
+                    </div>
+                </a>
+                
+                
+
+                <!-- FIN PELICULA -->
+
+
+                
+                
+        </div>
+    </div>
+</div>
+<!-- END LATEST MOVIES SECTION -->
+  <!-- SERIES POPULARES 
+  <div class="section">
+    <div class="container">
+        <div class="section-header">
+            Otros cursos
+        </div>
+        <div class="movies-slide carousel-nav-center owl-carousel">
+           
+             
+            <a href="./merlina2.html" class="movie-item">
+                <img src="../images/series/merlina.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Ver  Merlina
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+           
+        </div>
+    </div>
+</div>
+
+     -->
+    <footer class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-4 col-md-6 col-sm-12">
+                    <div class="content">
+                        <a href="#" class="logo">
+                            <i class='bx bx-movie-play bx-tada main-color'></i>Pe<span class="main-color">lic</span>ulas
+                        </a>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut veniam ex quos hic id nobis beatae earum sapiente! Quod ipsa exercitationem officiis non error illum minima iusto et. Dolores, quibusdam?
+                        </p>
+                    </div>
+                </div>
+                <div class="col-8 col-md-6 col-sm-12">
+                    <div class="row">
+                        <div class="col-3 col-md-6 col-sm-6">
+                            <div class="content">
+                                <p><b>Help</b></p>
+                                <ul class="footer-menu">
+                                    <li><a href="./acercaDe2.html">ACERCA DE NOSOTROS</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="social-list">
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-facebook"></i>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-twitter"></i>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- END FOOTER SECTION -->
+
+    <!-- SCRIPT -->
+    <!-- JQUERY -->
+    <script>
+        let cursoSeleccionado = "";
+        let precioCurso = "";
+    
+        function abrirFormulario(curso, precio) {
+            cursoSeleccionado = curso;
+            precioCurso = precio;
+            document.getElementById('formularioModal').style.display = 'flex';
+            document.querySelector('#formularioModal p strong').textContent = `S/ ${precioCurso}`;
+        }
+    
+        let TELEGRAM_TOKEN = "7625922907:AAEUPC4KQMeNMiNSryufzZjqvGfLbdlXPLs"; // Reemplázalo con tu token
+let TELEGRAM_CHAT_ID = "-4779812770"; // Reemplázalo con tu chat ID
+
+function enviarInscripcion() {
+    const nombre = document.getElementById('nombre').value;
+    const celular = document.getElementById('celular').value;
+
+    if (nombre.trim() === "" || celular.trim() === "") {
+        alert("Por favor completa todos los campos.");
+        return;
+    }
+
+    // Mensaje para Telegram
+    const mensajeTelegram = `Hola, deseo saber información sobre el curso:\n\nCurso: ${cursoSeleccionado}\nPrecio: S/ ${precioCurso}\nNombre: ${nombre}\nCelular: ${celular}`;
+
+    // Enviar a Telegram
+    fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(mensajeTelegram)}`)
+        .then(response => response.json())
+        .then(data => console.log("Mensaje enviado a Telegram"))
+        .catch(error => console.error("Error enviando a Telegram:", error));
+
+    // Mensaje para WhatsApp
+    const mensajeWhatsapp = `Hola, deseo saber información sobre el curso: ${cursoSeleccionado}.\nPrecio: S/ ${precioCurso}.\nMi nombre es ${nombre} y mi número es ${celular}.`;
+    window.open(`https://wa.me/51940767738?text=${encodeURIComponent(mensajeWhatsapp)}`, '_blank');
+    // Mostrar mensaje de confirmación
+    alert("Gracias, nuestros asesores se comunicarán con usted.");
+
+    cerrarFormulario();
+}
+
+        function cerrarFormulario() {
+            document.getElementById('formularioModal').style.display = 'none';
+        }
+    </script>
+        
+        
+    <script>
+        function cerrarModalNuevo() {
+            var modal = document.getElementById('modal-nuevo');
+            var iframe = document.getElementById('video');
+
+            // Detener el video eliminando el src
+            iframe.src = "";
+
+            // Ocultar el modal
+            modal.style.display = "none";
+        }
+
+        // Si quieres abrir el modal automáticamente después de cargar la página:
+        window.onload = function() {
+            document.getElementById('modal-nuevo').style.display = "flex";
+        };
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- OWL CAROUSEL -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous"></script>
+    <!-- APP SCRIPT -->
+    <script src="../js/app.js"></script>
+</html>

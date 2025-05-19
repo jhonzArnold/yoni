@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peliculas</title>
+
+    <style>
+        /* Modal Style */
+/* Modal Style */
+.modal-nuevo {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro */
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s ease-out; /* Animación de entrada */
+}
+
+    /* Animación de Fade-in para el modal */
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    .modal-nuevo iframe {
+    width: 100%;
+    height: 50vh; /* Ajusta la altura para que ocupe un 80% de la altura de la ventana */
+}
+
+   /* Estilo del contenido del modal */
+   .modal-nuevo-content {
+        background-color: #1a1a1a;
+        margin: 10% auto;
+        padding: 0px;
+        border: 5px solid #ff4081; /* Color llamativo para los bordes */
+        width: 100%;
+        max-width: 800px;
+        text-align: center;
+        border-radius: 10px; /* Bordes redondeados */
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra sutil */
+        animation: slideIn 0.5s ease-out;
+    }
+
+    /* Animación de deslizamiento para el contenido */
+    @keyframes slideIn {
+        0% { transform: translateY(-20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Estilo del texto en el modal */
+    .modal-nuevo-content h2 {
+        color: #ff4081;
+        font-family: 'Cairo', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        animation: textGlow 2s infinite alternate; /* Efecto de brillo */
+    }
+
+    /* Efecto de brillo en el texto */
+    @keyframes textGlow {
+        0% { text-shadow: 0 0 10px #ff4081, 0 0 20px #ff4081, 0 0 30px #ff4081; }
+        100% { text-shadow: 0 0 20px #ff4081, 0 0 40px #ff4081, 0 0 60px #ff4081; }
+    }
+
+    .modal-nuevo-content p {
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: 500;
+        margin-top: 10px;
+        animation: fadeInText 2s ease-out;
+    }
+
+    /* Animación de desvanecimiento para el texto */
+    @keyframes fadeInText {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    /* Botón de cierre */
+    .close-btn {
+        color: #ffffff;
+        background-color: #ff4081;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: 28px;
+        font-weight: bold;
+        transition: transform 0.3s ease;
+    }
+
+    /* Efecto de hover en el botón de cierre */
+    .close-btn:hover {
+        transform: scale(1.1);
+        background-color: #e91e63;
+    }
+
+    /* Botón principal */
+    button {
+        background-color: #ff4081;
+        color: white;
+        font-size: 18px;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 24px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+    }
+
+    /* Hover en el botón */
+    button:hover {
+        background-color: #e91e63;
+        transform: translateY(-5px);
+    }
+
+    /* Estilo general para las entradas del formulario */
+    input {
+        width: 80%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 2px solid #ff4081;
+        font-size: 16px;
+        transition: border 0.3s ease;
+    }
+
+    /* Efecto al enfocarse en el input */
+    input:focus {
+        border-color: #e91e63;
+        outline: none;
+    }
+    </style>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>
+         Peliculas
+     </title>
+       <!-- MODAL NUEVO -->
+    <div id="modal-nuevo" class="modal-nuevo">
+        <div class="modal-nuevo-content">
+            <div class="close-btn" onclick="cerrarModalNuevo()">X</div>
+            <h2>🔥😲🚀 ¡Descubre el Nuevo Tráiler de la Película que Promete Dejar Huella!......‼️‼️‼️‼️‼️</h2>
+            <p>👇Dale click para reproducir el sonido 👇👇👇...</p>
+            <iframe id="video" src="https://geo.dailymotion.com/player.html?video=k4l5Bfz0oUXXYCCWARQ" 
+                allow="autoplay; fullscreen; encrypted-media" 
+                allowfullscreen></iframe>
+        </div>
+    </div>
+
+
+
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <!-- OWL CAROUSEL -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+        integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+        crossorigin="anonymous" />
+    <!-- BOX ICONS -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <!-- APP CSS -->
+    <link rel="stylesheet" href="../css/grid.css">
+    <link rel="stylesheet" href="../css/app.css">
+</head>
+
+<body>
+
+  
+   <!-- NAV -->
+   <div class="nav-wrapper">
+    <div class="container">
+        <div class="nav">
+            <a href="./acercaDe2.html" class="logo">
+                <i class='bx bx-movie-play bx-tada main-color'></i>Tv<span class="main-color">- Lat</span>ino
+            </a>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="acercaDe2.html">Tv online</a></li>
+                
+                
+                <li><a href="./Peliculas2.html">Peliculas</a></li>
+                <li><a href="./series2.html">Series</a></li>
+                <li><a href="./cursos2.html">Cursos</a></li>
+                <!--<li><a href="./tienda2.html">Tienda</a></li> -->
+                <li><a href="./m.corporal2.html">M.corporal</a></li>
+                
+                <li><a href="radio2.html">radio</a></li>
+                <!--<li><a href="./juegos2.html">juegos</a></li>
+                <li><a href="./scraping2.html">Scraping</a></li>-->
+                <li>
+                    <a href="../../index.html" class="btn btn-hover">
+                        <span>Cerrar sesión</span>
+                    </a>
+                    
+                </li>
+            </ul>
+            <!-- MOBILE MENU TOGGLE -->
+            <div class="hamburger-menu" id="hamburger-menu">
+                <div class="hamburger"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END NAV -->
+  <!-- HERO SECTION -->
+  <div class="hero-section">
+    <!-- HERO SLIDE -->
+    <div class="hero-slide">
+        <div class="owl-carousel carousel-nav-center" id="hero-carousel">
+            <!-- SLIDE ITEM -->
+            <div class="hero-slide-item">
+                <img src="../images/thunder.webp" alt="">
+                <div class="overlay"></div>
+                <div class="hero-slide-item-content">
+                    <div class="item-content-wraper">
+                        <div class="item-content-title top-down">
+                            Thunderbolts*
+                        </div>
+                        <div class="movie-infos top-down delay-2">
+                            <div class="movie-info">
+                                <i class="bx bxs-star"></i>
+                                <span>8.5</span>
+                            </div>
+                            <div class="movie-info">
+                                <i class="bx bxs-time"></i>
+                                <span>127 mins</span>
+                            </div>
+                            <div class="movie-info">
+                                <span>HD</span>
+                            </div>
+                            <div class="movie-info">
+                                <span>16+</span>
+                            </div>
+                        </div>
+                        <div class="item-content-description top-down delay-4">
+                            Un equipo de villanos que se disfrazan de héroes en busca de redención. ¿Pueden cambiar su destino o están condenados a ser lo que son? ¡La lucha entre el bien y el mal nunca fue tan intrigante!
+                        </div>
+                        <div class="item-action top-down delay-6">
+                            <a href="amena22.html?video=https://smoothpre.com/embed/dw4cu7p7sguh" class="btn btn-hover">
+                                <i class="bx bxs-right-arrow"></i>
+                                <span>Ver ahora</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END SLIDE ITEM -->
+            <!-- SLIDE ITEM -->
+            <div class="hero-slide-item">
+                <img src="../images/blanca.webp" alt="">
+                <div class="overlay"></div>
+                <div class="hero-slide-item-content">
+                    <div class="item-content-wraper">
+                        <div class="item-content-title top-down">
+                            Blanca Nieves
+                        </div>
+                        <div class="movie-infos top-down delay-2">
+                            <div class="movie-info">
+                                <i class="bx bxs-star"></i>
+                                <span>8.5</span>
+                            </div>
+                            <div class="movie-info">
+                                <i class="bx bxs-time"></i>
+                                <span>127 mins</span>
+                            </div>
+                            <div class="movie-info">
+                                <span>HD</span>
+                            </div>
+                            <div class="movie-info">
+                                <span>16+</span>
+                            </div>
+                        </div>
+                        <div class="item-content-description top-down delay-4">
+                            "Blanca Nieves es una princesa muy hermosa con la piel blanca como la nieve. Su madrastra, la Reina, siente celos de su belleza y ordena matarla. Blanca Nieves escapa al bosque y encuentra refugio con siete enanitos. La Reina la engaña con una manzana envenenada y Blanca Nieves cae en un sueño profundo. Un príncipe la encuentra, la besa y rompe el hechizo. Al final, viven felices para siempre.
+                        </div>
+                        <div class="item-action top-down delay-6">
+                            <a href="amena22.html?video=https://ryderjet.com/embed/s8cr0aymrx84" class="btn btn-hover">
+                                <i class="bx bxs-right-arrow"></i>
+                                <span>Ver ahora</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END SLIDE ITEM -->
+           <!-- SLIDE ITEM -->
+<div class="hero-slide-item">
+<img src="../images/capa.webp" alt="">
+<div class="overlay"></div>
+<div class="hero-slide-item-content">
+    <div class="item-content-wraper">
+        <div class="item-content-title top-down">
+            Capitan America 4
+        </div>
+        <div class="movie-infos top-down delay-2">
+            <div class="movie-info">
+                <i class="bx bxs-star"></i>
+                <span>7.1</span>
+            </div>
+            <div class="movie-info">
+                <i class="bx bxs-time"></i>
+                <span>109 mins</span>
+            </div>
+            <div class="movie-info">
+                <span>Cine</span>
+            </div>
+            <div class="movie-info">
+                <span>16+</span>
+            </div>
+        </div>
+        <div class="item-content-description top-down delay-4">
+            "Capitán América 4: Brave New World" sigue la historia de Sam Wilson, quien ha asumido el manto de Capitán América tras los eventos de "Falcon y el Soldado de Invierno". En esta entrega, Sam enfrenta nuevos desafíos mientras lucha por definir su papel como el nuevo Capitán América en un mundo lleno de incertidumbres y amenazas.
+        </div>
+        <div class="item-action top-down delay-6">
+            <a href="amena22.html?video=https://ryderjet.com/embed/en809ygnnm76" class="btn btn-hover">
+                <i class="bx bxs-right-arrow"></i>
+                <span>Ver ahora</span>
+            </a>
+            <a href="amena22.html?video=https://ryderjet.com/embed/zm0j1hrs4bus" class="btn btn-hover">
+                <i class="bx bxs-right-arrow"></i>
+                <span>Ver ahora</span>
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+<!-- END SLIDE ITEM -->
+
+            <!-- SLIDE ITEM -->
+            <div class="hero-slide-item">
+                <img src="../images/mine.webp" alt="">
+                <div class="overlay"></div>
+                <div class="hero-slide-item-content">
+                    <div class="item-content-wraper">
+                        <div class="item-content-title top-down">
+                            Minecraft
+                        </div>
+                        <div class="movie-infos top-down delay-2">
+                            <div class="movie-info">
+                                <i class="bx bxs-star"></i>
+                                <span>6.5</span>
+                            </div>
+                            <div class="movie-info">
+                                <i class="bx bxs-time"></i>
+                                <span>91 mins</span>
+                            </div>
+                            <div class="movie-info">
+                                <span>HD</span>
+                            </div>
+                            <div class="movie-info">
+                                <span>16+</span>
+                            </div>
+                        </div>
+                        <div class="item-content-description top-down delay-4">
+                            La película de Minecraft sigue a una adolescente que debe salvar su mundo pixelado después de que el malvado Ender Dragón comienza a destruirlo todo. Junto a un grupo de aventureros valientes y criaturas únicas, viajan por el universo de bloques enfrentando peligros y resolviendo desafíos. Usando creatividad, trabajo en equipo y mucha valentía, luchan para restaurar la paz en su mundo antes de que sea demasiado tarde.
+                        </div>
+                        <div class="item-action top-down delay-6">
+                            <a href="amena22.html?video=https://smoothpre.com/embed/7tzlz5w7p44s" class="btn btn-hover">
+                                <i class="bx bxs-right-arrow"></i>
+                                <span>Ver ahora</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END SLIDE ITEM -->
+        </div>
+    </div>
+    <!-- END HERO SLIDE -->
+</div>
+<!-- END HERO SECTION -->
+
+<!-- LATEST MOVIES SECTION -->
+<div class="section">
+    <div class="container">
+        <div class="section-header">
+            Ultimas Peliculas
+        </div>
+        <div class="movies-slide carousel-nav-center owl-carousel">
+            
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://smoothpre.com/embed/dw4cu7p7sguh" class="movie-item">
+                <img src="../images/thunder.webp" alt="" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Thunderbolts*
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- END MOVIE ITEM -->
+             <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://smoothpre.com/embed/7tzlz5w7p44s" class="movie-item">
+                <img src="../images/mine.webp" alt="" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Minecraft
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- END MOVIE ITEM -->
+             <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/s8cr0aymrx84" class="movie-item">
+                <img src="../images/blanca.webp" alt="" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Blanca Nieves
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- END MOVIE ITEM -->
+           
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://smoothpre.com/embed/0vc6npt5adhy" class="movie-item">
+                <img src="../images/mike.jpg" alt="" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Mickey 17
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://smoothpre.com/embed/38k434yj6do2" class="movie-item">
+                <img src="../images/movies/All the Lost Ones.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        All the Lost Ones
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/mokno9ocunjq" class="movie-item">
+                <img src="../images/movies/girofinal.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Giro final
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/ll37zj61knqj" class="movie-item">
+                <img src="../images/movies/ode.jpg" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        O'Dessa
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/ek9t6mtml3rz" class="movie-item">
+                <img src="../images/movies/lady.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Lady Sakura
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/yiqg6qyxmnxt" class="movie-item">
+                <img src="../images/movies/deseo.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Mi lista de deseos 
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/vnhgx999q7sb" class="movie-item">
+                <img src="../images/movies/monk.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        The Monkey
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+        </div>
+    </div>
+</div>
+<!-- END LATEST MOVIES SECTION -->
+
+<!-- LATEST MOVIES SECTION -->
+<div class="section">
+    <div class="container">
+        <div class="section-header">
+            Peliculas populares
+        </div>
+        <div class="movies-slide carousel-nav-center owl-carousel">
+            <!-- MOVIE ITEM -->
+            <a href="peliculas3.html" class="movie-item">
+                <img src="../images/listas.jpg" alt="" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Ver lista de Peliculas
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/pztk3a8g3vbh" class="movie-item">
+                <img src="../images/movies/CAPE.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        La Caperucita roja: La historia jamás contada
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/dgyyst8wn4o3" class="movie-item">
+                <img src="../images/movies/nova.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Novocaine
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/xrv2ue0f45rg" class="movie-item">
+                <img src="../images/movies/estad.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Estado eléctrico
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/txc6vir4wgd9" class="movie-item">
+                <img src="../images/movies/pare.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        The Parenting
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/wlrgxzvkz7c9" class="movie-item">
+                <img src="../images/movies/the.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        The Last 24
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+            <!-- MOVIE ITEM -->
+            <a href="amena22.html?video=https://ryderjet.com/embed/62d2ikncqp2r" class="movie-item">
+                <img src="../images/movies/elhombre.webp" alt="">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        El Hombre de Ninguna Parte 
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>120 mins</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <!-- END MOVIE ITEM -->
+        </div>
+    </div>
+</div>
+<!-- END LATEST MOVIES SECTION -->
+
+
+        </div>
+    </div>
+</div>
+<!-- END LATEST MOVIES SECTION -->
+
+
+<!-- FOOTER SECTION -->
+<footer class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-4 col-md-6 col-sm-12">
+                <div class="content">
+                    <a href="#" class="logo">
+                        <i class='bx bx-movie-play bx-tada main-color'></i>Pe<span class="main-color">lic</span>ulas
+                    </a>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut veniam ex quos hic id nobis beatae earum sapiente! Quod ipsa exercitationem officiis non error illum minima iusto et. Dolores, quibusdam?
+                    </p>
+                </div>
+            </div>
+            <div class="col-8 col-md-6 col-sm-12">
+                <div class="row">
+                    <div class="col-3 col-md-6 col-sm-6">
+                        <div class="content">
+                            <p><b>Help</b></p>
+                            <ul class="footer-menu">
+                                <li><a href="">ACERCA DE NOSOTROS</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="social-list">
+                        <a href="#" class="social-item">
+                            <i class="bx bxl-facebook"></i>
+                        </a>
+                        <a href="#" class="social-item">
+                            <i class="bx bxl-twitter"></i>
+                        </a>
+                        <a href="#" class="social-item">
+                            <i class="bx bxl-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- END FOOTER SECTION -->
+    <!-- SCRIPT para cerrar el modal y detener el video -->
+    <script>
+        function cerrarModalNuevo() {
+            var modal = document.getElementById('modal-nuevo');
+            var iframe = document.getElementById('video');
+
+            // Detener el video eliminando el src
+            iframe.src = "";
+
+            // Ocultar el modal
+            modal.style.display = "none";
+        }
+
+        // Si quieres abrir el modal automáticamente después de cargar la página:
+        window.onload = function() {
+            document.getElementById('modal-nuevo').style.display = "flex";
+        };
+    </script>
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- OWL CAROUSEL -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous"></script>
+    <!-- APP SCRIPT -->
+    <script src="../js/app.js"></script>
+</html>
+
+</body>
+</html>

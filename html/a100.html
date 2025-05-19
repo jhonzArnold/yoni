@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>TV Latino - Oficial</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+       * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    text-align: center;
+    background-color: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    padding: 10px;
+}
+
+h1 {
+    margin-bottom: 10px;
+    padding-top: 10px;
+}
+
+.video-container {
+    position: relative;
+    width: 90vw;
+    max-width: 900px;
+    aspect-ratio: 16/9;
+    margin: 20px auto;
+}
+
+video, iframe {
+    width: 100%;
+    height: 100%;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    background-color: #000;
+}
+
+/* Ícono dentro del reproductor */
+.tv-icon {
+    position: absolute;
+    top: 40px;
+    right: 5px;
+    width: 45px;
+    height: 45px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.tv-icon img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Lista de canales (modal) */
+.channel-list {
+    position: absolute;
+    bottom: 70px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
+    padding: 10px;
+    display: none;
+    flex-direction: column;
+    z-index: 11;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background: #771818;
+}
+
+.channel-list button {
+    background-color: #222;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    margin: 5px 0;
+    text-align: left;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.channel-list button:hover {
+    background-color: #e61616;
+}
+
+.button-container {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ff3c00;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #ff1a00;
+}
+
+@media (max-width: 600px) {
+    .button-container {
+        flex-direction: column;
+    }
+    button {
+        width: 100%;
+    }
+}
+
+/* Botón flotante de regreso */
+.back-button {
+    position: fixed;
+    top: 60px;
+    left: 15px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #ff3c00, #ff8c00);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 10px rgba(255, 60, 0, 0.5);
+    z-index: 9999; /* AÑADE ESTO */
+}
+
+.back-button:hover {
+    background: linear-gradient(135deg, #ff8c00, #ff3c00);
+    transform: scale(1.1);
+    box-shadow: 0px 6px 14px rgba(255, 60, 0, 0.7);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #25D366;
+    border-radius: 80%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    z-index: 1000;
+    animation: bounce 1s infinite; /* Agregar animación de salto */
+}
+
+.whatsapp-float img {
+    width: 50px; /* Ajusta el tamaño del ícono */
+    height: 50px;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+}
+
+.modal-nuevo {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-nuevo-content {
+    background-color: #129971f6;
+    margin: 15% auto;
+    padding: 20px;
+    border: 8px solid #ccf70c;
+    width: 80%; /* Cambiado de 30% a 80% para que sea más ancho */
+    max-width: 800px; /* Agregado para limitar el ancho máximo */
+}
+
+.modal-nuevo-content h2, .modal-nuevo-content p {
+    color: #000000; /* Color negro */
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.image-zoom {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.image-zoom:hover {
+    transform: scale(1.1);
+}
+
+/* Barra de control flotante */
+.control-bar {
+    position: absolute;
+    bottom: 0; 
+    left: 0;
+    width: 100%;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    gap: 10px; 
+    background: rgb(184, 26, 26);
+    color: rgb(255, 255, 255);
+    padding: 0.5em; 
+    font-size: 1em; 
+    border-top: 2px solid #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Botones de la barra de control */
+.control-bar button {
+    background: #0c0204;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5em 1em;  /* Usamos em para el tamaño del botón */
+    color: white;
+    cursor: pointer;
+    font-size: 1.2em;  /* Fuente relativa */
+}
+
+/* Media Queries para dispositivos pequeños */
+@media (max-width: 768px) {
+    .control-bar {
+        bottom: 0;  /* Ajustar más hacia el centro de la pantalla en móviles */
+        padding: 0.8em;  /* Reducir un poco el padding en pantallas pequeñas */
+        font-size: 1em;  /* Ajustar el tamaño de la fuente */
+        gap: 4vw;  /* Espaciado más pequeño */
+    }
+
+    .control-bar button {
+        padding: 0.2em 0.4em;  /* Reducir el tamaño de los botones en pantallas pequeñas */
+        font-size: 0.9em;
+    }
+}
+
+/* Media Queries para pantallas muy pequeñas */
+@media (max-width: 480px) {
+    .control-bar {
+        bottom: 0;
+        padding: 0.6em;
+        font-size: 0.9em;
+        gap: 5vw;
+    }
+
+    .control-bar button {
+        padding: 0.3em 0.6em;
+        font-size: 1em;
+    }
+}
+
+/* Ícono de volumen */
+.volume-icon {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    width: 45px;
+    height: 45px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 24px;
+    color: white;
+}
+
+/* Ícono de reproducción */
+.play-icon {
+    position: absolute;
+    top: 90px; /* debajo de .tv-icon */
+    right: 5px;
+    width: 45px;
+    height: 45px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 24px;
+    color: white;
+}
+
+/* Estilo para el mute */
+.muted {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 35px;
+    height: 35px;
+    background: rgba(0, 0, 0, 0);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+    font-size: 20px;
+}
+
+.volume-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 120px;  /* Puedes ajustar esto si quieres aún más pequeño */
+  width: 100%;        /* O usa auto si prefieres que no estire */
+}
+
+#volumeControl {
+  width: 60px;        /* Tamaño fijo para la barra */
+  height: 4px;
+  cursor: pointer;
+}
+
+.volume-icon {
+  font-size: 16px;
+}
+
+    </style>
+    
+</head>
+<body>
+    <a href="https://wa.me/51940767738" class="whatsapp-float" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>
+
+    <h1>Canales en Vivo</h1>
+
+   <div class="video-container">
+        <video id="video" controls autoplay playsinline></video>
+
+    <!-- Íconos flotantes  
+    <div class="tv-icon" onclick="toggleChannelList()">📺</div> -->
+    <div class="play-icon" onclick="mostrarControles()">📌</div>
+    
+
+    <!-- Tu control-bar flotante -->
+    <div id="controlBar" class="control-bar">
+        <button onclick="canalAnterior()">⏮︎</button>
+        <span id="nombreCanal">Canal actual</span>
+        <button onclick="canalSiguiente()">⏭︎</button>
+     
+    
+
+    
+    <label for="volumeControl">Volumen:</label>
+    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" onchange="ajustarVolumen(this.value)">
+    
+</div>
+
+
+    <!-- Lista de canales -->
+    <div class="channel-list" id="channelList">
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/americatv/playlist.m3u8', 'America TV HD')">America TV HD</button>
+            <button onclick="playChannel('https://pelivechannelshls.media.claro.com.pe/bpk-tv/AMERICAHD/hls_fk/index.m3u8', 'America TV Claro')">America TV Claro</button>
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/latina/playlist.m3u8' ,'Latina Hd')">Latina Hd</button>
+            <button onclick="playChannel('https://live-evg25.tv360.bitel.com.pe/bitel/latina/playlist.m3u8','Latina Hd')">Latina</button>
+            <button onclick="playChannel('https://redirector.rudo.video/hls-video/567ffde3fa319fadf3419efda25619456231dfea/latina/latina.smil/playlist.m3u8','Latina Hd')">Latina</button>
+            <button onclick="playChannel('https://pelivechannelshls.media.claro.com.pe/bpk-tv/LATINAHD/hls_fk/index.m3u8','Latina Hd')">Latina</button>
+            <button onclick="playChannel('https://alba-pe-atv-atvmas.stream.mediatiquestream.com//index.m3u8','Latina Hd')">ATV +</button>
+            <button onclick="playChannel('https://pelivechannelshls.media.claro.com.pe/bpk-tv/ATVPLUS/hls_fk/index.m3u8','Latina Hd')">ATV +</button>
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/atv/playlist.m3u8','Latina Hd')">ATV</button>
+            <button onclick="playChannel('https://alba-pe-atv-atv.stream.mediatiquestream.com/index.m3u8','Latina Hd')">ATV</button>
+            <button onclick="playChannel('https://pelivechannelshls.media.claro.com.pe/bpk-tv/ATVHD/hls_fk/index.m3u8','Latina Hd')">ATV</button>
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/willax/playlist.m3u8','Latina Hd')">Wilax</button>
+            <button onclick="playChannel('https://pelivechannelshls.media.claro.com.pe/bpk-tv/WILLAXHD/hls_fk/index.m3u8','Latina Hd')">Wilax</button>
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/panamericana/playlist.m3u8','Latina Hd')">Panamericana</button>
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/tvperu/playlist.m3u8','Latina Hd')">Tv Peru</button>
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/exitosa/playlist.m3u8','Latina Hd')">La exitosa tv</button>
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/atvsur/playlist.m3u8','Latina Hd')">atv sur</button>
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/fmhmovies/playlist.m3u8','Latina Hd')">Fam movies</button>
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/fmhkids/playlist.m3u8','Latina Hd')">Fam kid</button>
+            <button onclick="playChannel('https://cloud5.streaminglivehd.com:3555/live/latinokidslive.m3u8','Latina Hd')">Latino kid</button>
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/pbo/playlist.m3u8','Latina Hd')">PBO</button>
+            <button onclick="playChannel('https://live-evg1.tv360.bitel.com.pe/bitel/latele/playlist.m3u8','Latina Hd')">La tele</button>
+            <button onclick="playChannel('https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8','Latina Hd')">Las estrellas</button>
+            <button onclick="playChannel('https://cdnesmain.telesur.ultrabase.net/mbliveMain/hd/playlist.m3u8','Latina Hd')">Tele Sur</button>
+            <button onclick="playChannel('https://cloudvideo.servers10.com:8081/8226/index.m3u8','Latina Hd')">delfin tv</button>
+            <button onclick="playChannel('https://stmv1.voxtvhd.com.br/vavizacli/vavizacli/playlist.m3u8','Latina Hd')">vavizacli</button>
+            <button onclick="playChannel('https://solo.disfrutaenlared.com:1936/redcctv/redcctv/playlist.m3u8','Latina Hd')">red cctv</button>
+            <button onclick="playChannel('https://solo.disfrutaenlared.com:1936/vtvcanal/vtvcanal/playlist.m3u8','Latina Hd')">la luz de dios</button>
+            <button onclick="playChannel('https://solo.disfrutaenlared.com:1936/tvshow/tvshow/playlist.m3u8')">canal 35 tv show</button>
+            <button onclick="playChannel('https://tv.mediacp.eu:8081/coraltv/index.m3u8','Latina Hd')">canal 45 cadena coral</button>
+            <button onclick="playChannel('https://video1.getstreamhosting.com:1936/8224/8224/playlist.m3u8','Latina Hd')">tv 7.2</button>
+            <button onclick="playChannel('http://master.tucableip.com/movil/index.m3u8','Latina Hd')">unitel hd</button>
+            <button onclick="playChannel('https://master.tucableip.com/univalletv/index.m3u8','Latina Hd')">univalle television</button>
+            <button onclick="playChannel('https://4e8223185173454299fbf03581b6dd7b.mediatailor.us-east-1.amazonaws.com/v1/master/44f73ba4d03e9607dcd9bebdcb8494d86964f1d8/Samsung_LawAndCrime/playlist.m3u8','Latina Hd')">usa crime</button>
+            <button onclick="playChannel('http://tv.istbolivia.com:1935/tvshow/tvshow/playlist.m3u8','Latina Hd','Latina Hd')">tvshow</button>
+            <button onclick="playChannel('https://tv.bitstreaming.net:3234/live/palenquetvlive.m3u8','Latina Hd','Latina Hd')">palenque</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/cartoonhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">Carton Network</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/boomeranghdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">cartonito</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/tntserieshdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">tnt series</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/tnthdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">tnt</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/tbshdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">tnt novelas</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/warnerhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">warne chanel</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/azcinemasdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">cinemax</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/syfyhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">usa network</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/fxhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">fx</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/cinemaxhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">cinemax</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/warnerhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">warner channel</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/dreamworkshdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">dreamworks</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/hbohdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">hbo</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/hbo2hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">hbo2</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/studiouniversalhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">studio universal</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/spacehdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">space</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/a3serieshdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">a3series</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/a3cinehdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">a3cine</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/amchdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">amc</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/starchannelhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">star chanel</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/disneyjrhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">disney jr</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/natgeohdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">national geograpic</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/ewtnsdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">ewtn mamita</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/tnesdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">tne</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/dischdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">discovery</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/discoveryturbosdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">discovery turbo</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/dischhhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">discovery hyh</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/disckidshdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">discovery kids</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/golfhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">gold chanel</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/animalplanethdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">animal planet</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/foodnetworkhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">food network</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/disctlchdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">tlc</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/discworldhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">discovery world</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/discscihdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">discoveri science</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/disctheaterhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">discovery theater</button>
+            <button onclick="playChannel('https://199211.global.ssl.fastly.net/643cc12aa824db4374021c8c/live_95f6ac80dd6511ed9d08b12be56ae55e/index.m3u8','Latina Hd')">inc tv</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/viaxhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">via x </button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/zonalatinahdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">zona latina</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/senpaitvhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">senpai</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/cnnintsdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">cnn internacional</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/cnnchilehdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">cnn chile</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/tvestarhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">star live</button>
+            <button onclick="playChannel('http://dz4jacps8l0pw.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-h2eezuzejgrr2-ssai-prd/playlist.m3u8','Latina Hd')">duck tv</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/bbchdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">bbc news</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/antena3hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">antena 3</button>
+            <button onclick="playChannel('https://pelivechannelshls.media.claro.com.pe/bpk-tv/TELEFEINTERNACIONAL/hls_fk/index.m3u8','Latina Hd')">teleinternacional</button>
+            <button onclick="playChannel('https://redirector.rudo.video/hls-video/c54ac2799874375c81c1672abb700870537c5223/ecuavisa/ecuavisa.smil/playlist.m3u8','Latina Hd')">ecuaviza</button>
+            <button onclick="playChannel('https://samson.streamerr.co:8081/shogun/index.m3u8','Latina Hd','Latina Hd')">ecuador tv</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/disneyhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">disney chanel</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/calamasdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">calama tv</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/canal2linaressdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">canla 2 linares</button>
+            <button onclick="playChannel('https://marine2.miplay.cl/canal2sanantonio/mono.m3u8','Latina Hd')">cnt infaltil</button>
+            <button onclick="playChannel('http://pantera1-100gb-cl-movistar.dps.live/perfiltv/perfiltv.smil/playlist.m3u8','Latina Hd')">canal E  dw</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/htvsdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">htv musica</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/lovenaturehdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">love nature</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/azcinemasdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">tv azteca</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/chvhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">chilevision</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/megahdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">mega</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/megaplushdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">mega2</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/megaficcionhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">mega ficcion</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/etctvhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">etc</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/ntvhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">tvn</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/sextavisionsdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">sextavision</button>
+            <button onclick="playChannel('https://pelivechannelshls.media.claro.com.pe/bpk-tv/LIFETIME/hls_fk/index.m3u8','Latina Hd')">fietime</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/trutvhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">adulto swin</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/cinecanalhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">cinecanal</button>
+            
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/foxsports2hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">esp7</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/foxsports1hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">espn</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/foxsports3hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">esp6</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/foxsports1hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">esp premiun</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/espn2hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">espn 2</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/espnhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">espn2</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/espn3hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">esp3</button>
+            <button onclick="playChannel('http://live1.cl.cdn.lla.vtrplay.com/disneyjrhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD','Latina Hd')">Disney Junior</button>
+           
+            <!-- Agrega más canales aquí -->
+        </div>
+    </div>
+
+
+    <button class="back-button" onclick="window.location.href='./acercaDe2.html'">⬅</button>
+
+   <script>
+function ajustarVolumen(valor) {
+    const video = document.getElementById('videoPlayer');
+    if (video) {
+        video.volume = parseFloat(valor);
+    }
+}
+</script>
+
+   <script>
+    let player;
+    const video = document.getElementById('video');
+
+    function playChannel(url, name) {
+        if (Hls.isSupported()) {
+            if (player) {
+                player.destroy();
+            }
+            player = new Hls();
+            player.loadSource(url);
+            player.attachMedia(video);
+            player.on(Hls.Events.MANIFEST_PARSED, function () {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = url;
+            video.addEventListener('loadedmetadata', function () {
+                video.play();
+            });
+        }
+
+        // Mostrar el nombre del canal actual
+        document.getElementById('nombreCanal').textContent = name;
+
+        // Ocultar lista de canales
+        document.getElementById('channelList').style.display = 'none';
+    }
+
+    function toggleChannelList() {
+        const list = document.getElementById('channelList');
+        list.style.display = list.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    const canales = [
+        { nombre: "America TV HD", url: "https://live-evg1.tv360.bitel.com.pe/bitel/americatv/playlist.m3u8" },
+        { nombre: "America TV Claro", url: "https://pelivechannelshls.media.claro.com.pe/bpk-tv/AMERICAHD/hls_fk/index.m3u8" },
+        { nombre: "Latina Hd", url: "https://live-evg1.tv360.bitel.com.pe/bitel/latina/playlist.m3u8"},
+            { nombre: "Latina", url: "https://live-evg25.tv360.bitel.com.pe/bitel/latina/playlist.m3u8"},
+            { nombre: "Latina", url: "https://redirector.rudo.video/hls-video/567ffde3fa319fadf3419efda25619456231dfea/latina/latina.smil/playlist.m3u8"},
+           { nombre: "Latina", url: "https://pelivechannelshls.media.claro.com.pe/bpk-tv/LATINAHD/hls_fk/index.m3u8"},
+           { nombre: "ATV +", url: "https://alba-pe-atv-atvmas.stream.mediatiquestream.com//index.m3u8"},
+            { nombre: "ATV +", url: "https://pelivechannelshls.media.claro.com.pe/bpk-tv/ATVPLUS/hls_fk/index.m3u8"},
+            { nombre: "ATV", url: "https://live-evg1.tv360.bitel.com.pe/bitel/atv/playlist.m3u8"},
+           { nombre: "ATV", url: "https://alba-pe-atv-atv.stream.mediatiquestream.com/index.m3u8"},
+           { nombre: "ATV", url: "https://pelivechannelshls.media.claro.com.pe/bpk-tv/ATVHD/hls_fk/index.m3u8"},
+            { nombre: "Wilax", url: "https://live-evg1.tv360.bitel.com.pe/bitel/willax/playlist.m3u8"},
+            { nombre: "Wilax", url: "https://pelivechannelshls.media.claro.com.pe/bpk-tv/WILLAXHD/hls_fk/index.m3u8"},
+            { nombre: "Panamericana", url: "https://live-evg1.tv360.bitel.com.pe/bitel/panamericana/playlist.m3u8"},
+            { nombre: "Tv Peru", url: "https://live-evg1.tv360.bitel.com.pe/bitel/tvperu/playlist.m3u8"},
+            { nombre: "La exitosa tv", url: "https://live-evg1.tv360.bitel.com.pe/bitel/exitosa/playlist.m3u8"},
+            { nombre: "atv sur", url: "https://live-evg1.tv360.bitel.com.pe/bitel/atvsur/playlist.m3u8"},
+            { nombre: "Fam movies", url: "https://live-evg1.tv360.bitel.com.pe/bitel/fmhmovies/playlist.m3u8"},
+            { nombre: "Fam kid", url: "https://live-evg1.tv360.bitel.com.pe/bitel/fmhkids/playlist.m3u8"},
+            { nombre: "Latino kid", url: "https://cloud5.streaminglivehd.com:3555/live/latinokidslive.m3u8"},
+            { nombre: "PBO", url: "https://live-evg1.tv360.bitel.com.pe/bitel/pbo/playlist.m3u8"},
+            { nombre: "La tele", url: "https://live-evg1.tv360.bitel.com.pe/bitel/latele/playlist.m3u8"},
+            { nombre: "Las estrellas", url: "https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8"},
+            { nombre: "Tele Sur", url: "https://cdnesmain.telesur.ultrabase.net/mbliveMain/hd/playlist.m3u8"},
+           { nombre: "delfin tv", url: "https://cloudvideo.servers10.com:8081/8226/index.m3u8"},
+            { nombre: "vavizacli", url: "https://stmv1.voxtvhd.com.br/vavizacli/vavizacli/playlist.m3u8"}, 
+            { nombre: "red cctv", url: "https://solo.disfrutaenlared.com:1936/redcctv/redcctv/playlist.m3u8"}, 
+          { nombre: "la luz de dios", url: "https://solo.disfrutaenlared.com:1936/vtvcanal/vtvcanal/playlist.m3u8"}, 
+            { nombre: "canal 35 tv show", url: "https://solo.disfrutaenlared.com:1936/tvshow/tvshow/playlist.m3u8"}, 
+          { nombre: "Acanal 45 cadena coral", url: "https://tv.mediacp.eu:8081/coraltv/index.m3u8"}, 
+           { nombre: "tv 7.2", url: "https://video1.getstreamhosting.com:1936/8224/8224/playlist.m3u8"}, 
+            { nombre: "unitel hd", url: "http://master.tucableip.com/movil/index.m3u8"}, 
+           { nombre: "univalle television", url: "https://master.tucableip.com/univalletv/index.m3u8"}, 
+            { nombre: "usa crime", url: "https://4e8223185173454299fbf03581b6dd7b.mediatailor.us-east-1.amazonaws.com/v1/master/44f73ba4d03e9607dcd9bebdcb8494d86964f1d8/Samsung_LawAndCrime/playlist.m3u8"}, 
+            { nombre: "tvshow", url: "http://tv.istbolivia.com:1935/tvshow/tvshow/playlist.m3u8"}, 
+            { nombre: "palenque", url: "https://tv.bitstreaming.net:3234/live/palenquetvlive.m3u8"}, 
+            { nombre: "Carton Network", url: "http://live1.cl.cdn.lla.vtrplay.com/cartoonhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+           { nombre: "cartonito", url: "http://live1.cl.cdn.lla.vtrplay.com/boomeranghdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "tnt series", url: "http://live1.cl.cdn.lla.vtrplay.com/tntserieshdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+           { nombre: "tnt", url: "http://live1.cl.cdn.lla.vtrplay.com/tnthdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+           
+           { nombre: "tnt novelas", url: "http://live1.cl.cdn.lla.vtrplay.com/tbshdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+           { nombre: "warne chanel", url: "http://live1.cl.cdn.lla.vtrplay.com/warnerhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+           { nombre: "cinemax", url: "http://live1.cl.cdn.lla.vtrplay.com/azcinemasdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "usa network", url: "http://live1.cl.cdn.lla.vtrplay.com/syfyhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "fx", url: "http://live1.cl.cdn.lla.vtrplay.com/fxhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+           { nombre: "cinemax", url: "http://live1.cl.cdn.lla.vtrplay.com/cinemaxhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "warner channel", url: "http://live1.cl.cdn.lla.vtrplay.com/warnerhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+           { nombre: "dreamworks", url: "http://live1.cl.cdn.lla.vtrplay.com/dreamworkshdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "hbo", url: "http://live1.cl.cdn.lla.vtrplay.com/hbohdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "hbo2", url: "http://live1.cl.cdn.lla.vtrplay.com/hbo2hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "studio universal", url: "http://live1.cl.cdn.lla.vtrplay.com/studiouniversalhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "space", url: "http://live1.cl.cdn.lla.vtrplay.com/spacehdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "a3series", url: "http://live1.cl.cdn.lla.vtrplay.com/a3serieshdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+           
+
+            { nombre: "a3cine", url: "http://live1.cl.cdn.lla.vtrplay.com/a3cinehdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "amc", url: "http://live1.cl.cdn.lla.vtrplay.com/amchdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "star chanel", url: "http://live1.cl.cdn.lla.vtrplay.com/starchannelhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "disney jr", url: "http://live1.cl.cdn.lla.vtrplay.com/disneyjrhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "national geograpic", url: "http://live1.cl.cdn.lla.vtrplay.com/natgeohdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "ewtn", url: "http://live1.cl.cdn.lla.vtrplay.com/ewtnsdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "tne", url: "http://live1.cl.cdn.lla.vtrplay.com/tnesdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "discovery", url: "http://live1.cl.cdn.lla.vtrplay.com/dischdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "discovery turbo", url: "http://live1.cl.cdn.lla.vtrplay.com/discoveryturbosdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "discovery hyh", url: "http://live1.cl.cdn.lla.vtrplay.com/dischhhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "discovery kids", url: "http://live1.cl.cdn.lla.vtrplay.com/disckidshdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "gold chanel", url: "http://live1.cl.cdn.lla.vtrplay.com/golfhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "animal planet", url: "http://live1.cl.cdn.lla.vtrplay.com/animalplanethdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "food network", url: "http://live1.cl.cdn.lla.vtrplay.com/foodnetworkhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "tlc", url: "http://live1.cl.cdn.lla.vtrplay.com/disctlchdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "discovery world", url: "http://live1.cl.cdn.lla.vtrplay.com/discworldhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "discoveri science", url: "http://live1.cl.cdn.lla.vtrplay.com/discscihdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "discovery theater", url: "http://live1.cl.cdn.lla.vtrplay.com/disctheaterhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "inc tv", url: "https://199211.global.ssl.fastly.net/643cc12aa824db4374021c8c/live_95f6ac80dd6511ed9d08b12be56ae55e/index.m3u8"}, 
+            { nombre: "via x ", url: "http://live1.cl.cdn.lla.vtrplay.com/viaxhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "zona latina", url: "http://live1.cl.cdn.lla.vtrplay.com/zonalatinahdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "senpai", url: "http://live1.cl.cdn.lla.vtrplay.com/senpaitvhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "cnn internacional", url: "http://live1.cl.cdn.lla.vtrplay.com/cnnintsdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "cnn chile", url: "http://live1.cl.cdn.lla.vtrplay.com/cnnchilehdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "star live", url: "http://live1.cl.cdn.lla.vtrplay.com/tvestarhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "duck tv", url: "http://dz4jacps8l0pw.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-h2eezuzejgrr2-ssai-prd/playlist.m3u8"}, 
+            { nombre: "bbc news", url: "http://live1.cl.cdn.lla.vtrplay.com/bbchdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "antena 3", url: "http://live1.cl.cdn.lla.vtrplay.com/antena3hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "teleinternacional", url: "https://pelivechannelshls.media.claro.com.pe/bpk-tv/TELEFEINTERNACIONAL/hls_fk/index.m3u8"}, 
+            { nombre: "ecuaviza", url: "https://redirector.rudo.video/hls-video/c54ac2799874375c81c1672abb700870537c5223/ecuavisa/ecuavisa.smil/playlist.m3u8"}, 
+            { nombre: "ecuador tv", url: "https://samson.streamerr.co:8081/shogun/index.m3u8"}, 
+            { nombre: "disney chanel", url: "http://live1.cl.cdn.lla.vtrplay.com/disneyhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "calama tv", url: "http://live1.cl.cdn.lla.vtrplay.com/calamasdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "canla 2 linares", url: "http://live1.cl.cdn.lla.vtrplay.com/canal2linaressdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "cnt infaltil", url: "https://marine2.miplay.cl/canal2sanantonio/mono.m3u8"}, 
+            { nombre: "canal E ", url: "http://pantera1-100gb-cl-movistar.dps.live/perfiltv/perfiltv.smil/playlist.m3u8"},  
+            { nombre: "htv musica", url: "http://live1.cl.cdn.lla.vtrplay.com/htvsdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "love nature", url: "http://live1.cl.cdn.lla.vtrplay.com/lovenaturehdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "tv azteca", url: "http://live1.cl.cdn.lla.vtrplay.com/azcinemasdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "chilevision", url: "http://live1.cl.cdn.lla.vtrplay.com/chvhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+           { nombre: "mega", url: "http://live1.cl.cdn.lla.vtrplay.com/megahdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "mega2", url: "http://live1.cl.cdn.lla.vtrplay.com/megaplushdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "mega ficcion", url: "http://live1.cl.cdn.lla.vtrplay.com/megaficcionhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "etc", url: "http://live1.cl.cdn.lla.vtrplay.com/etctvhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "tvn", url: "http://live1.cl.cdn.lla.vtrplay.com/ntvhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "sextavision", url: "http://live1.cl.cdn.lla.vtrplay.com/sextavisionsdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "fietime", url: "https://pelivechannelshls.media.claro.com.pe/bpk-tv/LIFETIME/hls_fk/index.m3u8"}, 
+            { nombre: "adulto swin", url: "http://live1.cl.cdn.lla.vtrplay.com/trutvhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "cinecanal", url: "http://live1.cl.cdn.lla.vtrplay.com/cinecanalhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "esp7", url: "http://live1.cl.cdn.lla.vtrplay.com/foxsports2hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "espn", url: "http://live1.cl.cdn.lla.vtrplay.com/foxsports1hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "esp6", url: "http://live1.cl.cdn.lla.vtrplay.com/foxsports3hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "esp premiun", url: "http://live1.cl.cdn.lla.vtrplay.com/foxsports1hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "espn2", url: "http://live1.cl.cdn.lla.vtrplay.com/espn2hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "espn2", url: "http://live1.cl.cdn.lla.vtrplay.com/espnhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"},
+            { nombre: "esp", url: "http://live1.cl.cdn.lla.vtrplay.com/espn3hdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}, 
+            { nombre: "Disney Junior", url: "http://live1.cl.cdn.lla.vtrplay.com/disneyjrhdchi/vxfmt=dp/playlist.m3u8?device_profile=STB_HLS_VCAS_LIVE_HD"}
+           
+       
+    ];
+    let canalActual = 0;
+
+    function canalAnterior() {
+        canalActual = (canalActual - 1 + canales.length) % canales.length;
+        playChannel(canales[canalActual].url, canales[canalActual].nombre);
+    }
+
+    function canalSiguiente() {
+        canalActual = (canalActual + 1) % canales.length;
+        playChannel(canales[canalActual].url, canales[canalActual].nombre);
+    }
+
+    // Inicializa el primer canal
+    window.onload = () => {
+        playChannel(canales[canalActual].url, canales[canalActual].nombre);
+    };
+
+    function toggleMute() {
+        video.muted = !video.muted;
+        document.querySelector('.volume-icon').innerText = video.muted ? '🔇' : '🔊';  // Mostrar icono de sonido
+    }
+
+    function ajustarVolumen(value) {
+        video.volume = value;  // Ajustar el volumen del video
+    }
+
+    function mostrarControles() {
+        const barra = document.getElementById('controlBar');
+        barra.style.display = barra.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function detenerReproduccion() {
+        video.pause();
+        video.src = "";
+    }
+
+    function reproducirM3U8(url) {
+        detenerReproduccion();
+        video.style.display = "block";
+
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                video.play().catch(error => console.error("Error al iniciar el video:", error));
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = url;
+            video.play().catch(error => console.error("Error al iniciar el video:", error));
+        } else {
+            alert("Tu navegador no soporta la reproducción de videos M3U8");
+        }
+
+        document.getElementById('channelList').style.display = 'none';
+    }
+
+    // Reproducción inicial
+    document.addEventListener("DOMContentLoaded", function () {
+        reproducirM3U8('https://pelivechannelshls.media.claro.com.pe/bpk-tv/AMERICAHD/hls_fk/index.m3u8');
+    });
+</script>
+
+<!-- Control de volumen en HTML -->
+
+
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap" rel="stylesheet">
+    <!-- OWL CAROUSEL -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" />
+    <!-- BOX ICONS -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <!-- APP CSS -->
+    <link rel="stylesheet" href="../css/grid.css">
+    <link rel="stylesheet" href="../css/app.css">
+</body>
+
+
+    <!-- NAV -->
+    <div class="nav-wrapper">
+        <div class="container">
+            <div class="nav">
+                <a href="./acercaDe2.html" class="logo">
+                    <i class='bx bx-movie-play bx-tada main-color'></i>Tv<span class="main-color">- Lat</span>ino
+                </a>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="./acercaDe2.html">Tv online</a></li>
+                    
+                    
+                    <li><a href="./Peliculas2.html">Peliculas</a></li>
+                    <li><a href="./series2.html">Series</a></li>
+                    <li><a href="./cursos2.html">Cursos</a></li>
+                    <!--<li><a href="./tienda2.html">Tienda</a></li> -->
+                    <li><a href="./m.corporal2.html">M.corporal</a></li>
+                    
+                    <li><a href="radio2.html">radio</a></li>
+                    <!--<li><a href="./juegos2.html">juegos</a></li>
+                    <li><a href="./scraping2.html">Scraping</a></li>-->
+                    <li>
+                        <a href="../../index.html" class="btn btn-hover">
+                            <span>Cerrar sesión</span>
+                        </a>
+                        
+                    </li>
+                </ul>
+                <!-- MOBILE MENU TOGGLE -->
+                <div class="hamburger-menu" id="hamburger-menu">
+                    <div class="hamburger"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+
+    
+
+ 
+            
+             
+
+        </div>
+    </div>
+</div>
+
+<!-- END LATEST MOVIES SECTION -->
+
+
+<!-- FOOTER SECTION -->
+<footer class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-4 col-md-6 col-sm-12">
+                <div class="content">
+                    <a href="#" class="logo">
+                        <i class='bx bx-movie-play bx-tada main-color'></i>Tv<span class="main-color">-Lat</span>ino
+                    </a>
+                    <p>
+                        "📺 TV Latino - Accede a una gran variedad 
+                        de canales en vivo . Disfruta de tus programas, 
+                        series y películas favoritas en cualquier momento
+                         y desde cualquier lugar. ¡Entretenimiento sin límites! 🎬🔥"
+                </div>
+            </div>
+            <div class="col-8 col-md-6 col-sm-12">
+                <div class="row">
+                    <div class="col-3 col-md-6 col-sm-6">
+                        <div class="content">
+                            <p><b>Help</b></p>
+                            <ul class="footer-menu">
+                                <li><a href="./acercaDe2.html">ACERCA DE NOSOTROS</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="social-list">
+                        <a href="#" class="social-item">
+                            <i class="bx bxl-facebook"></i>
+                        </a>
+                        <a href="#" class="social-item">
+                            <i class="bx bxl-twitter"></i>
+                        </a>
+                        <a href="#" class="social-item">
+                            <i class="bx bxl-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+ <!--END FOOTER SECTION -->
+
+<!-- SCRIPT -->
+<!-- JQUERY -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<!-- OWL CAROUSEL -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+    integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+    crossorigin="anonymous"></script>
+<!-- APP SCRIPT -->
+<script src="../js/app.js"></script>
+
+</html>

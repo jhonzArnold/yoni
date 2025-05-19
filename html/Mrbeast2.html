@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>TV Latino - Oficial</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            text-align: center;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 10px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 90vw;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            margin: 20px auto;
+        }
+
+        video, iframe {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            background-color: #000;
+        }
+
+        .button-container {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ff3c00;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff1a00;
+        }
+
+        @media (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
+        }
+
+        /* Botón flotante de regreso */
+        .back-button {
+            position: fixed;
+            top: 60px;
+            left: 15px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff3c00, #ff8c00);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(255, 60, 0, 0.5);
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #ff8c00, #ff3c00);
+            transform: scale(1.1);
+            box-shadow: 0px 6px 14px rgba(255, 60, 0, 0.7);
+        }
+
+        @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #25D366;
+    border-radius: 80%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    z-index: 1000;
+    animation: bounce 1s infinite; /* Agregar animación de salto */
+}
+
+.whatsapp-float img {
+    width: 50px; /* Ajusta el tamaño del ícono */
+    height: 50px;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+}
+.modal-nuevo {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-nuevo-content {
+    background-color: #129971f6;
+    margin: 15% auto;
+    padding: 20px;
+    border: 8px solid #ccf70c;
+    width: 80%; /* Cambiado de 30% a 80% para que sea más ancho */
+    max-width: 800px; /* Agregado para limitar el ancho máximo */
+}
+
+
+.modal-nuevo-content h2, .modal-nuevo-content p {
+    color: #000000; /* Color negro */
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.image-zoom {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.image-zoom:hover {
+    transform: scale(1.1);
+}
+
+
+    </style>
+</head>
+<body>
+    <a href="https://wa.me/51940767738" class="whatsapp-float" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+    </a>
+    
+    <button class="back-button" onclick="window.location.href='series2.html'">⬅</button>
+
+    <h1>Mrbeast</h1>
+    <!--  <div id="modal-nuevo" class="modal-nuevo">
+        <div class="modal-nuevo-content">
+            
+            Contenido del modal -
+            <div class="close-btn" onclick="cerrarModalNuevo()">X</div> 
+            <h2>🔥😭¿Cansado del calor?🥵❄️</h2>
+            <p>❄️Visita nuestra página y descubre más.</p>
+            <img src="../images/canales/yo.jpg" alt="Ver Ahora" onclick="verTrailer()" class="image-zoom">
+        </div>
+    </div>-->
+    <div class="video-container">
+        <video id="video" controls autoplay playsinline muted></video>
+        <iframe id="iframe" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+    </div>
+    <button onclick="activarPantallaCompleta()">⛶ Pantalla Completa</button> 
+    
+
+    <script>
+           window.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("modal-nuevo").style.display = "flex";
+});
+
+function cerrarModalNuevo() {
+    document.getElementById("modal-nuevo").style.display = "none";
+}
+
+function verTrailer() {
+    cerrarModalNuevo();
+    window.open("file:///C:/Users/Jhon/Downloads/borrar/Nueva%20carpeta/tienda/frozen.html", "_blank");// Abre el video en otra pestaña
+}
+        function activarPantallaCompleta() {
+    let video = document.getElementById('video');
+    let iframe = document.getElementById('iframe');
+
+    if (video.style.display !== "none") {
+        // Si el video está visible, activamos pantalla completa en él
+        if (video.requestFullscreen) {
+            video.requestFullscreen();
+        } else if (video.mozRequestFullScreen) { // Firefox
+            video.mozRequestFullScreen();
+        } else if (video.webkitRequestFullscreen) { // Chrome, Safari y Opera
+            video.webkitRequestFullscreen();
+        } else if (video.msRequestFullscreen) { // IE/Edge
+            video.msRequestFullscreen();
+        }
+    } else if (iframe.style.display !== "none") {
+        // Si el iframe está visible, activamos pantalla completa en él
+        if (iframe.requestFullscreen) {
+            iframe.requestFullscreen();
+        } else if (iframe.mozRequestFullScreen) {
+            iframe.mozRequestFullScreen();
+        } else if (iframe.webkitRequestFullscreen) {
+            iframe.webkitRequestFullscreen();
+        } else if (iframe.msRequestFullscreen) {
+            iframe.msRequestFullscreen();
+        }
+    } else {
+        alert("No hay contenido en reproducción para poner en pantalla completa.");
+    }
+}
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Reproducir automáticamente el primer canal al cargar la página
+            reproducirIframe('https://peytonepre.com/embed/ui5pkhpi7f5k');
+        });
+    
+        function detenerReproduccion() {
+            const video = document.getElementById('video');
+            const iframe = document.getElementById('iframe');
+    
+            video.pause();
+            video.src = "";
+            iframe.src = "";
+            iframe.style.display = "none";
+            video.style.display = "none";
+        }
+    
+        function reproducirM3U8(url) {
+            detenerReproduccion();
+            const video = document.getElementById('video');
+            video.style.display = "block";
+    
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    video.play().catch(error => console.error("Error al iniciar el video:", error));
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.play().catch(error => console.error("Error al iniciar el video:", error));
+            } else {
+                alert("Tu navegador no soporta la reproducción de videos M3U8");
+            }
+        }
+    
+        function reproducirIframe(url) {
+            detenerReproduccion();
+            const iframe = document.getElementById('iframe');
+            iframe.style.display = "block";
+            iframe.src = url;
+        }
+    </script>
+    
+
+
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <!-- OWL CAROUSEL -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+        integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+        crossorigin="anonymous" />
+    <!-- BOX ICONS -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <!-- APP CSS -->
+    <link rel="stylesheet" href="../css/grid.css">
+    <link rel="stylesheet" href="../css/app.css">
+</head>
+
+<body>
+
+     <!-- NAV -->
+     <div class="nav-wrapper">
+        <div class="container">
+            <div class="nav">
+                <a href="acercaDe2.html" class="logo">
+                    <i class='bx bx-movie-play bx-tada main-color'></i>Tv<span class="main-color">- Lat</span>ino
+                </a>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="acercaDe2.html">Tv online</a></li>
+                    <li><a href="./Peliculas2.html">Peliculas</a></li>
+                    <li><a href="./series2.html">Series</a></li>
+                    <li><a href="./cursos2.html">Cursos</a></li>
+                    <!--<li><a href="./tienda2.html">Tienda</a></li> -->
+                    <li><a href="./m.corporal2.html">M.corporal</a></li>
+                    
+                    <li><a href="radio2.html">radio</a></li>
+                    <!--<li><a href="./juegos2.html">juegos</a></li>
+                    <li><a href="./scraping2.html">Scraping</a></li>-->
+                    <li>
+                        <a href="../../index.html" class="btn btn-hover">
+                            <span>Cerrar sesión</span>
+                        </a>
+                        
+                    </li>
+                </ul>
+                <!-- MOBILE MENU TOGGLE -->
+                <div class="hamburger-menu" id="hamburger-menu">
+                    <div class="hamburger"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+
+    
+
+  <!-- LATEST MOVIES SECTION -->
+  <div class="section">
+    <div class="container">
+        <div class="section-header">
+            Capitulos
+        </div>
+        <div class="movies-slide carousel-nav-center owl-carousel">
+            <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/series/de.jpg" alt="" onclick="reproducirIframe('https://peytonepre.com/embed/ui5pkhpi7f5k')" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Dexter 1
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <button onclick="reproducirIframe('https://peytonepre.com/embed/ui5pkhpi7f5k')" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+            <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/series/de.jpg" alt="" onclick="reproducirIframe('https://peytonepre.com/v/rfx5xs3a7ea2')" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Dexter 2
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <button onclick="reproducirIframe('https://peytonepre.com/v/rfx5xs3a7ea2')" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+
+            
+            <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/series/de.jpg" alt="" onclick="reproducirIframe('https://peytonepre.com/v/towhpzajf26h')" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Dexter 3
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <button onclick="reproducirIframe('https://peytonepre.com/v/towhpzajf26h')" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+              <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/series/de.jpg" alt="" onclick="reproducirIframe('https://peytonepre.com/v/x9nr02d7oxq1')" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Dexter 4
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <button onclick="reproducirIframe('https://peytonepre.com/v/x9nr02d7oxq1')" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+              <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/series/de.jpg" alt="" onclick="reproducirIframe('https://ryderjet.com/v/y5dg9sh9pyeu')" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Dexter 5
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <button onclick="reproducirIframe('https://ryderjet.com/v/y5dg9sh9pyeu')" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+              <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/series/de.jpg" alt="" onclick="reproducirIframe('https://ryderjet.com/v/urvzhu4umzdf')" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Dexter 6
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <button onclick="reproducirIframe('https://ryderjet.com/v/urvzhu4umzdf')" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+              <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/series/de.jpg" alt="" onclick="reproducirIframe('https://vidhidefast.com/v/0sce0nqqe4j3')" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Dexter 7
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <button onclick="reproducirIframe('https://vidhidefast.com/v/0sce0nqqe4j3')" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+              <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/series/de.jpg" alt="" onclick="reproducirIframe('https://ryderjet.com/embed/b49pa7or8zh1')" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Dexter 8
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <button onclick="reproducirIframe('https://ryderjet.com/embed/b49pa7or8zh1')" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+            <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/series/de.jpg" alt="" onclick="reproducirIframe('https://ryderjet.com/embed/l4jn51hqjbkt')" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Dexter 9
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <button onclick="reproducirIframe('https://ryderjet.com/embed/l4jn51hqjbkt')" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             <!-- ANIME ITEM -->
+            <div class="movie-item">
+                <img src="../images/series/de.jpg" alt="" onclick="reproducirIframe('https://ryderjet.com/embed/ddga2z5etpht')" style="cursor: pointer;">
+                <div class="movie-item-content">
+                    <div class="movie-item-title">
+                        Dexter 10
+                    </div>
+                    <div class="movie-infos">
+                        <div class="movie-info">
+                            <i class="bx bxs-star"></i>
+                            <span>9.5</span>
+                        </div>
+                        <div class="movie-info">
+                            <i class="bx bxs-time"></i>
+                            <span>Online</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>HD</span>
+                        </div>
+                        <div class="movie-info">
+                            <span>16+</span>
+                        </div>
+                    </div>
+                    <div class="item-action">
+                        <button onclick="reproducirIframe('https://ryderjet.com/embed/ddga2z5etpht')" class="btn btn-hover">
+                            <span>Ver ahora</span>
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <!-- END ANIME ITEM -->
+             
+             
+
+        </div>
+    </div>
+</div>
+
+<!-- END LATEST MOVIES SECTION -->
+    
+
+ 
+
+
+    <!-- FOOTER SECTION -->
+    <footer class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-4 col-md-6 col-sm-12">
+                    <div class="content">
+                        <a href="#" class="logo">
+                            <i class='bx bx-movie-play bx-tada main-color'></i>Tv<span class="main-color">-Lat</span>ino
+                        </a>
+                        <p>
+                            📺 TV Latino – Tu universo de series en un solo lugar.
+Disfruta maratones, nuevos episodios y clásicos que no pasan de moda.
+Donde quieras, cuando quieras… entretenimiento sin límites. 🎬🔥
+                    </div>
+                </div>
+                <div class="col-8 col-md-6 col-sm-12">
+                    <div class="row">
+                        <div class="col-3 col-md-6 col-sm-6">
+                            <div class="content">
+                                <p><b>Help</b></p>
+                                <ul class="footer-menu">
+                                    <li><a href="">ACERCA DE NOSOTROS</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="social-list">
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-facebook"></i>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-twitter"></i>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+     <!--END FOOTER SECTION -->
+
+    <!-- SCRIPT -->
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- OWL CAROUSEL -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous"></script>
+    <!-- APP SCRIPT -->
+    <script src="../js/app.js"></script>
+    
+</html>

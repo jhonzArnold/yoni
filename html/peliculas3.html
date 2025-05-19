@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Películas</title>
+    <link rel="stylesheet" href="../css/grid.css">
+    <link rel="stylesheet" href="../css/app.css">
+    <style>
+        body {
+            background-color: #121212; /* Fondo oscuro */
+            color: white; /* Texto blanco */
+            font-family: Arial, sans-serif;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .movie-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .movie-frame {
+            width: 100px; /* Ancho del recuadro */
+            height: 40px; /* Alto del recuadro reducido */
+            background-color: black; /* Fondo negro */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .movie-frame img {
+            width: 100%; /* Imagen dentro del recuadro */
+            height: 100%;
+            object-fit: cover; /* Mantiene la proporción */
+        }
+
+        .movie-item-content {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .button-container {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ff3c00;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff1a00;
+        }
+
+        @media (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
+        }
+
+        /* Botón flotante de regreso */
+        .back-button {
+    position: fixed;
+    top: 60px;
+    left: 15px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #ff3c00, #ff8c00);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 10px rgba(255, 60, 0, 0.5);
+    z-index: 9999; /* Asegura que esté delante de todo */
+}
+
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #ff8c00, #ff3c00);
+            transform: scale(1.1);
+            box-shadow: 0px 6px 14px rgba(255, 60, 0, 0.7);
+        }
+
+        @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #25D366;
+    border-radius: 80%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    z-index: 1000;
+    animation: bounce 1s infinite; /* Agregar animación de salto */
+}
+
+.whatsapp-float img {
+    width: 50px; /* Ajusta el tamaño del ícono */
+    height: 50px;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+}
+    </style>
+</head>
+
+<body>
+    <a href="https://wa.me/51940767738" class="whatsapp-float" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+    </a>
+    <button class="back-button" onclick="window.location.href='peliculas2.html'">⬅</button>
+    <!-- NAV -->
+    <div class="nav-wrapper">
+        <div class="container">
+            <div class="nav">
+                <a href="" class="logo">
+                    <i class='bx bx-movie-play bx-tada main-color'></i>Tv<span class="main-color">- Lat</span>ino
+                </a>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="">Tv online</a></li>
+                    
+                    
+                    <li><a href="./Peliculas2.html">Peliculas</a></li>
+                    <li><a href="./series2.html">Series</a></li>
+                    <!--<li><a href="./tienda2.html">Tienda</a></li> -->
+                    <li><a href="./m.corporal2.html">M.corporal</a></li>
+                    
+                    <li><a href="radio2.html">radio</a></li>
+                    <!--<li><a href="./juegos2.html">juegos</a></li>
+                    <li><a href="./scraping2.html">Scraping</a></li>-->
+                    <li>
+                        <a href="../../index.html" class="btn btn-hover">
+                            <span>Cerrar sesión</span>
+                        </a>
+                        
+                    </li>
+                </ul>
+                <!-- MOBILE MENU TOGGLE -->
+                <div class="hamburger-menu" id="hamburger-menu">
+                    <div class="hamburger"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+
+   
+            </div>
+        </div>
+        <!-- END HERO SLIDE -->
+    </div>
+    <!-- END HERO SECTION -->
+
+    
+    <div class="section">
+        <div class="container">
+            <div class="section-header">Ultimas Películas</div>
+            <div class="movies-grid">
+                <a href="amena22.html?video=https://smoothpre.com/embed/0vc6npt5adhy" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/mike.jpg" alt="Mickey 17">
+                    </div>
+                    <div class="movie-item-content">Mickey 17</div>
+                </a>
+                <a href="amena22.html?video=https://smoothpre.com/embed/38k434yj6do2" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/movies/All the Lost Ones.jpg" alt="All the Lost Ones">
+                    </div>
+                    <div class="movie-item-content">All the Lost Ones</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/mokno9ocunjq" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/movies/girofinal.webp" alt="Giro final">
+                    </div>
+                    <div class="movie-item-content">Giro final</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/ll37zj61knqj" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/movies/ode.jpg" alt="O'Dessa">
+                    </div>
+                    <div class="movie-item-content">O'Dessa</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/ek9t6mtml3rz" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/movies/lady.webp" alt="Lady Sakura">
+                    </div>
+                    <div class="movie-item-content">Lady Sakura</div>
+                </a>
+                
+                <a href="amena22.html?video=https://ryderjet.com/embed/vnhgx999q7sb" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/movies/monk.webp" alt="The Monkey">
+                    </div>
+                    <div class="movie-item-content">The Monkey</div>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="section">
+        <div class="container">
+            <div class="section-header">Películas</div>
+            <div class="movies-grid">
+                
+                <a href="amena22.html?video=https://smoothpre.com/embed/4qok8i66zqrl" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/estra.webp" alt="Estragos">
+                    </div>
+                    <div class="movie-item-content">Estragos</div>
+                </a> 
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/t2k0cxs12slh" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/until.webp" alt="Until Dawn: Noche de terror">
+                    </div>
+                    <div class="movie-item-content">Until Dawn: Noche de terror</div>
+                </a> 
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/7t8ugxue4i8c" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/panico.webp" alt="Pánico en el tren bala">
+                    </div>
+                    <div class="movie-item-content">Pánico en el tren bala</div>
+                </a> 
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/5whzgnsdvnpz" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/ochi.webp" alt="La Leyenda de Ochi">
+                    </div>
+                    <div class="movie-item-content">La Leyenda de Ochi</div>
+                </a> 
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/ks78ekgehdda" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/Tiempo de guerra.webp" alt="Tiempo de guerra">
+                    </div>
+                    <div class="movie-item-content">Tiempo de guerra</div>
+                </a> 
+                
+                <a href="amena22.html?video=https://smoothpre.com/embed/n0u3zzjgax14" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/Freaky Tales.webp" alt="Freaky Tales">
+                    </div>
+                    <div class="movie-item-content">Freaky Tales</div>
+                </a> 
+                
+                <a href="amena22.html?video=https://smoothpre.com/embed/h6y9j63wifs9" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/El Rey de Reyes.webp" alt="El Rey de Reyes">
+                    </div>
+                    <div class="movie-item-content">El Rey de Reyes</div>
+                </a> 
+                
+                <a href="amena22.html?video=https://smoothpre.com/embed/ej9m1475uohq" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/El contador 2.webp" alt="El contador 2">
+                    </div>
+                    <div class="movie-item-content">El contador 2</div>
+                </a> 
+                
+                <a href="amena22.html?video=https://smoothpre.com/embed/qzg2ly89xb66" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/home.webp" alt="Home Sweet Home: Rebirth">
+                    </div>
+                    <div class="movie-item-content">Home Sweet Home: Rebirth</div>
+                </a>  
+                
+                <a href="amena22.html?video=https://smoothpre.com/embed/gzhll3ice3zu" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/la huella.webp" alt="La huella del mal">
+                    </div>
+                    <div class="movie-item-content">La huella del mal</div>
+                </a>  
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/xe6tpdcgtw9p" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/g20.webp" alt="G20">
+                    </div>
+                    <div class="movie-item-content">G20</div>
+                </a>  
+
+                <a href="amena22.html?video=https://ryderjet.com/embed/vagtxrykdadf" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/conclave.webp" alt="conclave">
+                    </div>
+                    <div class="movie-item-content">conclave</div>
+                </a>  
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/7vyhaj78vdo0" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/code.webp" alt="The Codes of War">
+                    </div>
+                    <div class="movie-item-content">The Codes of War</div>
+                </a>  
+
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/f3ex3ascg6kr" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/tot.webp" alt="Tornado: Atrapados en la tormenta">
+                    </div>
+                    <div class="movie-item-content">Tornado: Atrapados en la tormenta</div>
+                </a>  
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/4jw3s46pvrrl" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/pop.webp" alt="Popeye the Slayer Man">
+                    </div>
+                    <div class="movie-item-content">Popeye the Slayer Man</div>
+                </a>  
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/5kakts7gbh0y" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/plan.webp" alt="Plankton: La película">
+                    </div>
+                    <div class="movie-item-content">Plankton: La película</div>
+                </a>  
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/40k3t8do2mvy" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/tht.webp" alt="Colmillos del Bayou">
+                    </div>
+                    <div class="movie-item-content">Colmillos del Bayou</div>
+                </a>  
+                 
+                <a href="amena22.html?video=https://ryderjet.com/embed/jykw1jb51k4o" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/dos.webp" alt="Los dos hemisferios de Lucca">
+                    </div>
+                    <div class="movie-item-content">Los dos hemisferios de Lucca</div>
+                </a>  
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/nlxy54m1klyp" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/Into the Deep.webp" alt="Into the Deep">
+                    </div>
+                    <div class="movie-item-content">Into the Deep</div>
+                </a>        
+
+                <a href="amena22.html?video=https://ryderjet.com/embed/ja62k0jaea8t" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/peter.webp" alt="Peter Pan: El infierno de Nunca Jamás">
+                    </div>
+                    <div class="movie-item-content">Peter Pan: El infierno de Nunca Jamás</div>
+                </a>
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/a00pfa0j38xk" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/retra.webp" alt="Theatre of the Dead">
+                    </div>
+                    <div class="movie-item-content">Retrato de un amor a ciegas</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/l2hspz27d4b8" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/fabrica.webp" alt="Transformer">
+                    </div>
+                    <div class="movie-item-content">Fabricante de Lagrimas</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/4kqzzd3pjw5a" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/el hilo.jpg" alt="Resident Evil">
+                    </div>
+                    <div class="movie-item-content">El hilo Rojo</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/4fwlzs1zedm5" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/unahisto.jpg" alt="Captain Marvel">
+                    </div>
+                    <div class="movie-item-content">Una historia de amor en copenhague</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/2iigdgu06boa" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/demon.jpg" alt="Hunter Killer">
+                    </div>
+                    <div class="movie-item-content">Oni-Goroshi: Ciudad de los demonios</div>
+                </a>
+                 
+                <a href="amena22.html?video=https://smoothpre.com/embed/25h346wpc0ck" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/Bobes.webp" alt="Bob Esponja: Campamento de Terror">
+                    </div>
+                    <div class="movie-item-content">Bob Esponja: Campamento de Terror</div>
+                </a>
+
+                
+
+                <a href="amena22.html?video=https://ryderjet.com/embed/nal9dsfn3o7b" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/ricos.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Ricos, sin duda</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/rchqh7vijcia" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/bastion.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Bastion 36</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/ydibpa9ugxe8" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/contraata.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Contraataque</div>
+                </a>
+                <a href="amena22.html?video=https://smoothpre.com/embed/hkbmutrfrr6j" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/capa.webp" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Capitan america 4</div>
+                </a>
+                
+                <a href="amena22.html?video=https://vidhidefast.com/v/6w6rrfqyssm7" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/quiercomer.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Quiero comerme tu pancreas</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/9380d9vnyv5k" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/fragmento.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Fragmento</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/7ftlq5t1croh" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/aventuras.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Las aventuras de Dog Man</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/7202e391261u" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/compañera.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Compañera perfecta</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/7ooehzzfos81" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/roboperfect.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">El Robo Perfecto: Pantera</div>
+                </a>
+                <a href="amena22.html?video=https://peytonepre.com/v/drmpsern13f0" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/bajoelagua.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">ALGO BAJO EL AGUA</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/sniper.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">SNIPER LA ULTIMA RESISTENCIA</div>
+                </a>
+                
+                <a href="amena22.html?video=https://ryderjet.com/v/50d6zoqjtosl" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/laculpa.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">LA CULPA NO ES MIA</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/ucakq3q3ti9b" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/elasesino.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">EL ASESINO DEL CALENDARIO</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/gq8li6vjo06x" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/amena.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Amenaza en el aire</div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/embed/p10f064at3jd" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/pad.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Paddingto 1</div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/embed/6ragjsptw20r" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/pad2.webp" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Paddingto 2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/a5ca4fqsh910" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/pad3.webp" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Paddingto 3</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/6xgsnbwgtmx9" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/mylas.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">AVICII MI ULTIMO SHOW</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/izyztol8pqrr" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/notemu.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">NO TE MUERAS EL HOMBRE QUE QUIERE VIVIR PARA SIEMPRE</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/bfys8a2stkke" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/lobo.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Hombre lobo</div>
+                </a>
+                <a href="amena22.html?video=https://nikaplayerr.com/embed/cvb3t1yqmkuj" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/sawx.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Saw X</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/y637h6i5v2se" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/buton.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">El Curioso Caso de Benjamin Button</div>
+                </a>
+                <a href="amena22.html?video=https://peytonepre.com/v/drmpsern13f0" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/algo.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">ALGO BAJO EL AGUA</div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/v/a4eo8d1zlu7l" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/hechi.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">HECHIZADOS</div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/embed/xm6ulai6f3st" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/culpami.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">CULPA mia</div>
+                </a>
+                <a href="amena22.html?video=https://peytonepre.com/v/emufledm88ut" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/culpa.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">CULPA TUYA</div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/v/v8wvv9b4wgly" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/so2.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">SONIC 2</div>
+                </a>
+                <a href="amena22.html?video=https://dooodster.com/e/fj0mkxcbnjym" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/so3.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">SONIC 3 </div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/v/wrk6qkmqfamv" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/mufasa.jpeg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Mufasa-Calidad cine</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/43nk2rhhkifs" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/cra.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">kraven-Calidad</div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/embed/79pejcv6jna2" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/ve3.avif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Venom 3</div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/v/4bfuk06z1a6x" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/equipa.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">EQUIPAJE DE MANO </div>
+                </a>
+                <a href="amena22.html?video=https://nikaplayerr.com/embed/kmnpialqhtfi" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/10.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">El 10 de la calle</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/qrhzb8qzsl0i" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/trasformer.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">TRANSFORMERS EL DESPERTAR DE LAS BESTIAS</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/sc8o8v2jq2e2" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/mi1.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Extraction 1</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/wemkmeqf4g2a" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/mi22.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Extraction 2</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/eke3y63iu1qg" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/finch.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">FINCH</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/6nfsngbmakqh" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/theflash.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">THE FLASH</div>
+                </a>
+                <a href="amena22.html?video=https://iplayerhls.com/n52gkaiy762d" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/proyectox.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Proyecto X</div>
+                </a>
+                <a href="amena22.html?video=https://iplayerhls.com/gck0jjqfdp3a" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/figura.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">FIGURAS OCULTAS</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/yxgg3f8h27wj" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/barbie.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">BARBIE</div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/v/us9u1wzwguic" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/mariaa.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">MARÍA </div>
+                </a>
+                <a href="amena22.html?video=https://iplayerhls.com/jebqfog1v48x" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/hasta el ultimo hombre.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Hasta el último hombre</div>
+                </a>
+                <a href="amena22.html?video=https://peytonepre.com/v/6uedkuxd8f9v" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/unchar.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">UNCHARTED FUERA DEL MAPA</div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/v/w7g738ju45ve" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/thebatman.jpeg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">THE BATMAN</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/iu6cs4jmqpey" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/nowayhome.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Ver Spider-Man: No Way Home</div>
+                </a>
+                <a href="amena22.html?video=https://iplayerhls.com/xhr0l6c1x3zd" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/megan.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Megan</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/1oa4q4xhy8yi" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/ballena.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">LA BALLENA</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/ccc5x1pbeirx" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/aladin.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Aladdín</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/knjllhojeubg" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/exorcista.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">El exorcista del papa</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidehub.com/v/vjj6nzyxbye2" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/gladiador1.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">GLADIADOR 1</div>
+                </a>
+                <a href="amena22.html?video=https://nikaplayerr.com/embed/10uepdq75qxr" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/gladiador2.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">GLADIADOR 2</div>
+                </a>
+                <a href="amena22.html?video=https://nikaplayerr.com/embed/m7n8llee1v8h" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/stream.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Stream</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/ux0ghbdfkrs5" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/mario.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Super Mario Bros</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/wdzqdeq1djt2" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/deadnote.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Death Note</div>
+                </a>
+                <a href="amena22.html?video=https://nikaplayerr.com/embed/s3xtfhk6cwfc" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/apoca.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Apocalipsis Z</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/6t6p7cn0d5vu" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/elemental.jpeg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Elemental</div>
+                </a>
+                <a href="amena22.html?video=https://iplayerhls.com/grjom2er3kwo" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/hoyo1.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">el hoyo 1</div>
+                </a>
+                <a href="amena22.html?video=https://iplayerhls.com/y7bctwdvtevx" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/hoyo2.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">el hoyo 2</div>
+                </a>
+                <a href="amena22.html?video=https://iplayerhls.com/nkml8dht1c04" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/truco.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">LOS TIPOS MALOS TRUCO O ATRACO</div>
+                </a>
+                <a href="amena22.html?video=https://iplayerhls.com/14j6xq8bi5n2" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/abracada.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">ABRACADAVER</div>
+                </a>
+  
+                <a href="amena22.html?video=https://smoothpre.com/embed/phlihknwgc6b" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/muerte2.webp" alt="Feliz día de tu muerte 2">
+                    </div>
+                    <div class="movie-item-content">Feliz día de tu muerte 2</div>
+                </a>
+               
+                <a href="amena22.html?video=https://dooodster.com/e/ason205tplqc" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/alien.webp" alt="Alien: Romulus">
+                    </div>
+                    <div class="movie-item-content">Alien: Romulus</div>
+                </a>
+                <a href="amena22.html?video=https://smoothpre.com/embed/i700nxyj8c7j" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/five.webp" alt="Five Nights at Freddy’s">
+                    </div>
+                    <div class="movie-item-content">Five Nights at Freddy’s</div>
+                </a>
+                <a href="amena22.html?video=https://niikaplayerr.com/v/mpxw9hq2ot36" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/scream5.webp" alt="Scream 6">
+                    </div>
+                    <div class="movie-item-content">Scream 6</div>
+                </a>
+
+                <a href="amena22.html?video=https://ryderjet.com/embed/e5nhnydct0fj" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/scream5.webp" alt="Scream 5">
+                    </div>
+                    <div class="movie-item-content">Scream 5</div>
+                </a>
+                <a href="amena22.html?video=https://niikaplayerr.com/v/yysvm53eieii" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/scream5.webp" alt="Scream 4">
+                    </div>
+                    <div class="movie-item-content">Scream 4</div>
+                </a>
+                <a href="amena22.html?video=https://niikaplayerr.com/v/y5y48t53e9k7" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/scream5.webp" alt="Scream 3">
+                    </div>
+                    <div class="movie-item-content">Scream 3</div>
+                </a>
+                <a href="amena22.html?video=https://niikaplayerr.com/v/j1ra8oca2ch8" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/scream5.webp" alt="Scream 2">
+                    </div>
+                    <div class="movie-item-content">Scream 2</div>
+                </a>
+                <a href="amena22.html?video=https://niikaplayerr.com/v/qtkzlzlxpoiu" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/scream5.webp" alt="Scream ">
+                    </div>
+                    <div class="movie-item-content">Scream </div>
+                </a>
+                <a href="amena22.html?video=https://smoothpre.com/embed/pz2ijoav96gl" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/La monja.webp" alt="La monja 2">
+                    </div>
+                    <div class="movie-item-content">La monja 2</div>
+                </a>
+
+                <a href="amena22.html?video=https://smoothpre.com/embed/9ln13x9k8vy6" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/La monja.webp" alt="La monja">
+                    </div>
+                    <div class="movie-item-content">La monja</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/texls0m6ik7k" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/hero.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">DRAGON BALL SUPER SUPER HERO</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/clzkn5u33vot" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/gat.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">EL GATO CON BOTAS EL ULTIMO DESEO</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/r40w859vr4w4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/simio.jpeg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">El reino del planeta de los simios</div>
+                </a>
+                <a href="amena22.html?video=https://iplayerhls.com/ct95d6mjf4rm" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/minovio.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">MI NOVIO ES UN ZOMBIE</div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/v/17ygzlhik0mj" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/lig.jpeg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">LIGHTYEAR</div>
+                </a>
+                <a href="amena22.html?video=hhttps://vidhidefast.com/v/ipxtavndgflc" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/jhon3.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">JOHN WICK 3</div>
+                </a>
+                <a href="amena22.html?video=https://iplayerhls.com/dctnat2uxx42" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/jhon4.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">JOHN WICK 4</div>
+                </a>
+                <a href="amena22.html?video=https://smoothpre.com/embed/kt1ja3j2bba1" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/Guardianes.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">GUARDIANES DE LA GALAXIA 3</div>
+                </a>
+                <a href="amena22.html?video=https://smoothpre.com/embed/1ehvfe96qc66" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/cred3.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Creed 3</div>
+                </a>
+                <a href="amena22.html?video=https://filelions.to/v/i86i9qmm7inh" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/megafre.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Megalodon: The Frenzy</div>
+                </a>
+                <a href="amena22.html?video=https://filelions.to/v/efihj8ma7eyo" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/mega2.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Megalodón 2</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/6phi4sp1zi5g" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/en buscade.webp" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">EN BUSCA DE LA FELICIDAD</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/rn3wfnv48ii7" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/pinocho.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Pinocho de Guillermo del Toro</div>
+                </a>
+              
+                <a href="amena22.html?video=https://iplayerhls.com/qedxqoov3n81" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/beat.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">BEETLEJUICE1</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/ssrmcy7dkead" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/splice.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Splice: Experimento mortal</div>
+                </a>
+                <a href="amena22.html?video=https://vidhidefast.com/v/deljo31bu9it" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/bumble.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Bumblebee</div>
+                </a>
+                <a href="amena22.html?video=https://nikaplayerr.com/embed/k9u1qcxb3k5q" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/wallace.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Wallace y Gromit 2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/8z82kpld4sar" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/robot.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Robot salvaje</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/d2rgxzyto57m" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/al.jpeg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Alien: Romulus</div>
+                </a>
+                <a href="amena22.html?video=https://iplayerhls.com/39slrm0x42c5" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/dead1.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">deadl pol 1</div>
+                </a>
+                <a href="amena22.html?video=https://dhtpre.com/v/buc89d6zxbl4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/dead2.jpeg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">deadl pol 2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/3yr5oup7ihjg" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/dea.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">deadl pol y wolvenrin</div>
+                </a>
+               
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/mi villano.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">mi villano favorito4</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/joker1.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">JOKER 1</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/jocker2.png" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Jocker2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/La Sustancia.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">La Sustancia</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/terr1.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Terrifer 1</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/terrifer2.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Terrifer 2</div>
+                </a>
+                <a href="amena22.html?video=https://dooodster.com/e/pypsp1tdqsyh" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/terr.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Terrifer 3</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/embed/68num2oya30e" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/coco.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Coco</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/garf.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Garfield</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/nacho.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">NACHO LIBRE</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/rompe.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Romper el circulo(aun de cine)</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/yoa.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Yo antes de ti (baja caldidad)</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/intensamente2.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Intensamente2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/wonka.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Wonka </div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/bad.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">bad boy 2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/god.jpeg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Godzilla vs kong</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/grana.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Gran Turismo</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/moana1.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Moana 1</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/moana 2.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Moana 2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/palma.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Palma,mi amiga</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/minom.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">MI NOMBRE ES KHAN</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/Oppenheimer.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">oppenheimer</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/todo poderoso.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Todo Poderoso 1</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/look.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Look Back</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/sonrie 2.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Sonrie 2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/win.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Winniw de Pooh 2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/Wish.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Wish</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/el astronauta.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">El astronauta</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/dam.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Damsel</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/coco.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">whisker away </div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/coco.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">your name</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/Aquaman y el reino perdido.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Aquaman 2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/kon.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Kong la isla calavera</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/Kung fu panda 1.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Kung fu panda 1</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/Kung fu panda 2.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Kung fu panda 2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/Kung fu panda 3.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Kung fu panda 3</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/Kung Fu Panda 4.jfif" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Kunfu Panda 4</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/Alice.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Alice</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/El juego de la muerte.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">El juego de la muerte</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/Hacker.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Hacker</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/se1.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Shrek 1</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/se2.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Shrek 2</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/se3.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Shrek 3</div>
+                </a>
+                <a href="amena22.html?video=https://ryderjet.com/v/z4wr1ve4j6a4" class="movie-item">
+                    <div class="movie-frame">
+                        <img src="../images/cartoons/se4.jpg" alt="Coco">
+                    </div>
+                    <div class="movie-item-content">Shrek 4</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    
+   
+
+
+    <!-- FOOTER SECTION -->
+    <footer class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-4 col-md-6 col-sm-12">
+                    <div class="content">
+                        <a href="#" class="logo">
+                            <i class='bx bx-movie-play bx-tada main-color'></i>Pe<span class="main-color">lic</span>ulas
+                        </a>
+                        <p>
+                            Aquí no solo hablamos de películas, vivimos el cine. Desde las explosiones de Hollywood hasta los diálogos que te hacen pensar, cada historia es una experiencia que te atrapa, te sacude y no te suelta. ¿Buscas acción, romance, terror o algo que te vuele la cabeza? .Entonces estás en el lugar correcto.
+Prepárate para emocionarte . ¡Esto no es solo una página de cine... es tu nueva adicción!
+                        </p>
+                    </div>
+                </div>
+                <div class="col-8 col-md-6 col-sm-12">
+                    <div class="row">
+                        <div class="col-3 col-md-6 col-sm-6">
+                            <div class="content">
+                                <p><b>Help</b></p>
+                                <ul class="footer-menu">
+                                    <li><a href="./acercaDe2.html">ACERCA DE NOSOTROS</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="social-list">
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-facebook"></i>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-twitter"></i>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="bx bxl-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- END FOOTER SECTION -->
+
+    <!-- SCRIPT -->
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- OWL CAROUSEL -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous"></script>
+    <!-- APP SCRIPT -->
+    <script src="../js/app.js"></script>
+</html>
